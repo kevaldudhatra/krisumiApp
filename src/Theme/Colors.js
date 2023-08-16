@@ -6,6 +6,8 @@ const Colors = {
   borderColor: "#B1B1B1",
   goldColorText: "#A48F65",
   backgroundColor: "#F4F4F4",
+  inactiveDotColor: "#DEDEDE",
+  activeDotColor: "#A8894F",
 };
 
 export default Colors;

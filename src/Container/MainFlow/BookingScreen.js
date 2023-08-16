@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Colors, Fonts, Images } from "../../Theme/Index";
 import { Actions } from "react-native-router-flux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 import {
   StyleSheet,
   Text,
@@ -12,6 +13,35 @@ import {
 } from "react-native";
 
 export default function BookingScreen() {
+  const [index, setIndex] = useState(0);
+  const isCarousel = useRef(null);
+
+  const data = [
+    {
+      id: 1,
+      url: 'https://icon-library.com/images/react-icon/react-icon-29.jpg',
+    },
+    {
+      id: 2,
+      url: 'https://upload.wikimedia.org/wikipedia/commons/3/3b/Javascript_Logo.png',
+    },
+  ];
+
+  const renderItem = ({ item }) => {
+    return (
+      <Image
+        style={{
+          height: 110,
+          borderRadius: 10,
+          marginHorizontal: 10,
+          marginTop: 10,
+          resizeMode: "cover",
+        }}
+        source={{ uri: item.url }}
+      ></Image>
+    );
+  };
+
   return (
     <KeyboardAwareScrollView style={{ flex: 1, backgroundColor: Colors.white }}>
       <View
@@ -53,17 +83,34 @@ export default function BookingScreen() {
               </Text>
             </View>
 
-            <Image
-              style={{
-                height: 110,
-                borderRadius: 10,
-                margin: 10,
-                resizeMode: "contain",
+            <Carousel
+              ref={isCarousel}
+              data={data}
+              renderItem={renderItem}
+              sliderWidth={Dimensions.get('window').width - 40}
+              itemWidth={Dimensions.get('window').width - 40}
+              onSnapToItem={index => setIndex(index)}
+            />
+            <Pagination
+              dotsLength={data.length}
+              activeDotIndex={index}
+              carouselRef={isCarousel}
+              dotStyle={{
+                width: 10,
+                height: 10,
+                borderRadius: 5,
+                backgroundColor: Colors.activeDotColor,
               }}
-              source={{
-                uri: "https://plus.unsplash.com/premium_photo-1689977871600-e755257fb5f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+              inactiveDotStyle={{
+                width: 10,
+                height: 10,
+                borderRadius: 5,
+                backgroundColor: Colors.borderColor,
               }}
-            ></Image>
+              tappableDots={true}
+              inactiveDotOpacity={1}
+              inactiveDotScale={0.8}
+            />
 
             <Text numberOfLines={3} style={styles.discriptionText}>
               {
@@ -88,7 +135,7 @@ export default function BookingScreen() {
               </View>
             </View>
 
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => { }}>
               <View style={styles.viewContainer}>
                 <Text style={styles.viewText}>View</Text>
                 <View style={styles.viewButton}>
@@ -113,7 +160,7 @@ export default function BookingScreen() {
                 height: 110,
                 borderRadius: 10,
                 margin: 10,
-                resizeMode: "contain",
+                resizeMode: 'cover',
               }}
               source={{
                 uri: "https://plus.unsplash.com/premium_photo-1689977871600-e755257fb5f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
@@ -143,7 +190,7 @@ export default function BookingScreen() {
               </View>
             </View>
 
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => { }}>
               <View style={styles.viewContainer}>
                 <Text style={styles.viewText}>View</Text>
                 <View style={styles.viewButton}>
@@ -252,7 +299,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     alignSelf: "center",
     width: Dimensions.get("window").width * 0.65,
-    marginTop: 15,
     marginBottom: 20,
   },
   boxContainer: {
