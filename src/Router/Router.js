@@ -1,16 +1,17 @@
-import React, {useEffect} from 'react';
-import {Router, Scene, Stack, Actions} from 'react-native-router-flux';
-import {Colors, ScreenName} from '../Theme/Index';
-import {BackHandler} from 'react-native';
+import React, { useEffect } from "react";
+import { Router, Scene, Stack, Actions } from "react-native-router-flux";
+import { Colors, ScreenName } from "../Theme/Index";
+import { BackHandler } from "react-native";
 
 // screen list
-import SplashScreen from '../Container/MainFlow/SplashScreen';
-import LoginScreen from '../Container/MainFlow/LoginScreen';
-import RaiseTicketScreen from '../Container/MainFlow/RaiseTicketScreen';
-import HomeScreen from '../Container/MainFlow/HomeScreen';
-import ContactUsScreen from '../Container/MainFlow/ContactUsScreen';
+import SplashScreen from "../Container/MainFlow/SplashScreen";
+import LoginScreen from "../Container/MainFlow/LoginScreen";
+import RaiseTicketScreen from "../Container/MainFlow/RaiseTicketScreen";
+import HomeScreen from "../Container/MainFlow/HomeScreen";
+import ContactUsScreen from "../Container/MainFlow/ContactUsScreen";
+import BookingScreen from "../Container/MainFlow/BookingScreen";
 
-export default function RouterComponent({isAuthed}) {
+export default function RouterComponent({ isAuthed }) {
   const backAction = () => {
     let screeName = Actions.currentScene;
     if (screeName === ScreenName.SplashScreen) {
@@ -21,13 +22,13 @@ export default function RouterComponent({isAuthed}) {
   };
 
   useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', backAction);
+    BackHandler.addEventListener("hardwareBackPress", backAction);
     return () =>
-      BackHandler.removeEventListener('hardwareBackPress', backAction);
+      BackHandler.removeEventListener("hardwareBackPress", backAction);
   }, []);
 
   return (
-    <Router sceneStyle={{backgroundColor: Colors.white}}>
+    <Router sceneStyle={{ backgroundColor: Colors.white }}>
       <Stack>
         <Scene hideNavBar key="auth" initial={!isAuthed}>
           <Scene
@@ -58,6 +59,11 @@ export default function RouterComponent({isAuthed}) {
             <Scene
               key={ScreenName.ContactUsScreen}
               component={ContactUsScreen}
+              hideNavBar={true}
+            />
+            <Scene
+              key={ScreenName.BookingScreen}
+              component={BookingScreen}
               hideNavBar={true}
             />
           </Stack>

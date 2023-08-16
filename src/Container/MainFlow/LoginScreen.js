@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
-import {Colors, Fonts, Images, ScreenName} from '../../Theme/Index';
-import {Actions} from 'react-native-router-flux';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import React, { useState } from "react";
+import { Colors, Fonts, Images, ScreenName } from "../../Theme/Index";
+import { Actions } from "react-native-router-flux";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
   StyleSheet,
   Text,
@@ -12,32 +12,35 @@ import {
   Keyboard,
   Dimensions,
   TouchableOpacity,
-} from 'react-native';
+} from "react-native";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
   return (
-    <KeyboardAwareScrollView style={{flex: 1, backgroundColor: Colors.white}}>
+    <KeyboardAwareScrollView style={{ flex: 1, backgroundColor: Colors.white }}>
       <View
         style={{
           flex: 1,
           backgroundColor: Colors.white,
-          justifyContent: 'space-between',
-          flexDirection: 'column',
-        }}>
+          justifyContent: "space-between",
+          flexDirection: "column",
+        }}
+      >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.mainContainer}>
             <View style={styles.loginHeader}>
               <TouchableOpacity
                 onPress={() => {
                   Actions.pop();
-                }}>
+                }}
+              >
                 <View style={styles.backButton}>
                   <Image
                     style={styles.backIcon}
-                    source={Images.backwardIcon}></Image>
+                    source={Images.backwardIcon}
+                  ></Image>
                 </View>
               </TouchableOpacity>
               <Text style={styles.loginText}>Login</Text>
@@ -47,31 +50,32 @@ export default function LoginScreen() {
             <Text style={styles.emailText}>Email</Text>
             <TextInput
               style={styles.emailInput}
-              onChangeText={text => {
+              onChangeText={(text) => {
                 setEmail(text);
               }}
               value={email}
               placeholderTextColor={Colors.borderColor}
-              placeholderStyle={{fontFamily: Fonts.DMSansRegular}}
+              placeholderStyle={{ fontFamily: Fonts.DMSansRegular }}
               placeholder="Enter Your Email"
               keyboardType="email-address"
             />
             <Text style={styles.passwordText}>Password</Text>
             <TextInput
               style={styles.emailInput}
-              onChangeText={text => {
+              onChangeText={(text) => {
                 setPassword(text);
               }}
               value={password}
               placeholderTextColor={Colors.borderColor}
-              placeholderStyle={{fontFamily: Fonts.DMSansRegular}}
+              placeholderStyle={{ fontFamily: Fonts.DMSansRegular }}
               placeholder="Enter Your Password"
               keyboardType="default"
             />
             <TouchableOpacity
               onPress={() => {
                 Actions.push(ScreenName.HomeScreen);
-              }}>
+              }}
+            >
               <View style={styles.loginButton}>
                 <Text style={styles.loginButtonText}>Login</Text>
               </View>
@@ -79,7 +83,8 @@ export default function LoginScreen() {
             <TouchableOpacity
               onPress={() => {
                 Actions.push(ScreenName.RaiseTicketScreen);
-              }}>
+              }}
+            >
               <View style={styles.bottomText}>
                 <Text style={styles.changePasswordText}>Change Password?</Text>
                 <Text style={styles.raiseTicketText}>Raise A Ticket</Text>
@@ -87,12 +92,14 @@ export default function LoginScreen() {
             </TouchableOpacity>
             <Image
               style={styles.topImage}
-              source={Images.topBackgroung}></Image>
+              source={Images.topBackgroung}
+            ></Image>
           </View>
         </TouchableWithoutFeedback>
         <Image
           style={styles.bottomImage}
-          source={Images.bottomBackgroung}></Image>
+          source={Images.bottomBackgroung}
+        ></Image>
       </View>
     </KeyboardAwareScrollView>
   );
@@ -100,35 +107,35 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   mainContainer: {
-    width: Dimensions.get('window').width,
+    width: Dimensions.get("window").width,
     backgroundColor: Colors.white,
-    justifyContent: 'flex-start',
+    justifyContent: "flex-start",
     paddingTop: 30,
     paddingHorizontal: 20,
-    flexDirection: 'column',
+    flexDirection: "column",
   },
   loginHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   backButton: {
     height: 30,
     width: 30,
     borderRadius: 15,
     backgroundColor: Colors.lightOrange,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   backIcon: {
     height: 15,
     width: 15,
-    alignSelf: 'center',
+    alignSelf: "center",
     tintColor: Colors.arrowColor,
   },
   loginText: {
     fontSize: 20,
     color: Colors.black,
-    alignSelf: 'center',
+    alignSelf: "center",
     fontFamily: Fonts.RobotoMedium,
   },
   blankButton: {
@@ -136,33 +143,33 @@ const styles = StyleSheet.create({
     width: 30,
     borderRadius: 15,
     backgroundColor: Colors.white,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   appNameImage: {
     height: 80,
-    alignSelf: 'center',
-    marginBottom: '15%',
-    marginTop: '10%',
-    resizeMode: 'contain',
+    alignSelf: "center",
+    marginBottom: "15%",
+    marginTop: "10%",
+    resizeMode: "contain",
   },
   topImage: {
-    position: 'absolute',
+    position: "absolute",
     top: -5,
     right: 5,
     height: 225,
     width: 50,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   bottomImage: {
     height: 210,
-    width: '75%',
-    resizeMode: 'cover',
-    alignSelf: 'flex-start',
+    width: "75%",
+    resizeMode: "cover",
+    alignSelf: "flex-start",
   },
   emailText: {
     fontSize: 16,
     color: Colors.black,
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     marginBottom: 10,
     fontFamily: Fonts.RobotoMedium,
   },
@@ -176,7 +183,7 @@ const styles = StyleSheet.create({
   passwordText: {
     fontSize: 16,
     color: Colors.black,
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     marginBottom: 10,
     marginTop: 15,
     fontFamily: Fonts.RobotoMedium,
@@ -186,32 +193,32 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.lightOrange,
     borderRadius: 35,
     marginTop: 25,
-    alignContent: 'center',
-    justifyContent: 'center',
+    alignContent: "center",
+    justifyContent: "center",
   },
   loginButtonText: {
     fontSize: 18,
     fontFamily: Fonts.RobotoMedium,
     color: Colors.arrowColor,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   bottomText: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     marginVertical: 25,
   },
   changePasswordText: {
     fontSize: 15,
     fontFamily: Fonts.RobotoMedium,
     color: Colors.black,
-    alignSelf: 'center',
+    alignSelf: "center",
     marginRight: 5,
   },
   raiseTicketText: {
     fontSize: 15,
     fontFamily: Fonts.RobotoMedium,
     color: Colors.goldColorText,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
 });
