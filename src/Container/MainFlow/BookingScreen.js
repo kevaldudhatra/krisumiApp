@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Colors, Fonts, Images } from "../../Theme/Index";
+import React, { useState, useRef } from "react";
+import { Colors, Fonts, Images, ScreenName } from "../../Theme/Index";
 import { Actions } from "react-native-router-flux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Carousel, { Pagination } from 'react-native-snap-carousel';
+import Carousel, { Pagination } from "react-native-snap-carousel";
 import {
   StyleSheet,
   Text,
@@ -14,16 +14,20 @@ import {
 
 export default function BookingScreen() {
   const [index, setIndex] = useState(0);
-  const isCarousel = useRef(null);
+  // const isCarousel = useRef(null);
 
   const data = [
     {
       id: 1,
-      url: 'https://icon-library.com/images/react-icon/react-icon-29.jpg',
+      url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
     },
     {
       id: 2,
-      url: 'https://upload.wikimedia.org/wikipedia/commons/3/3b/Javascript_Logo.png',
+      url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+    },
+    {
+      id: 3,
+      url: "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=692&q=80",
     },
   ];
 
@@ -31,7 +35,7 @@ export default function BookingScreen() {
     return (
       <Image
         style={{
-          height: 110,
+          height: 135,
           borderRadius: 10,
           marginHorizontal: 10,
           marginTop: 10,
@@ -83,34 +87,46 @@ export default function BookingScreen() {
               </Text>
             </View>
 
-            <Carousel
-              ref={isCarousel}
-              data={data}
-              renderItem={renderItem}
-              sliderWidth={Dimensions.get('window').width - 40}
-              itemWidth={Dimensions.get('window').width - 40}
-              onSnapToItem={index => setIndex(index)}
-            />
-            <Pagination
-              dotsLength={data.length}
-              activeDotIndex={index}
-              carouselRef={isCarousel}
-              dotStyle={{
-                width: 10,
-                height: 10,
-                borderRadius: 5,
-                backgroundColor: Colors.activeDotColor,
-              }}
-              inactiveDotStyle={{
-                width: 10,
-                height: 10,
-                borderRadius: 5,
-                backgroundColor: Colors.borderColor,
-              }}
-              tappableDots={true}
-              inactiveDotOpacity={1}
-              inactiveDotScale={0.8}
-            />
+            <View style={{ alignSelf: "center", flex: 1 }}>
+              <Carousel
+                // ref={isCarousel}
+                data={data}
+                renderItem={renderItem}
+                sliderWidth={Dimensions.get("window").width - 40}
+                itemWidth={Dimensions.get("window").width - 40}
+                onSnapToItem={(index) => setIndex(index)}
+              />
+              <Pagination
+                dotsLength={data.length}
+                activeDotIndex={index}
+                // carouselRef={isCarousel}
+                containerStyle={{
+                  paddingTop: 15,
+                  paddingBottom: 10,
+                  width: data.length * 10 + 20,
+                  alignSelf: "center",
+                }}
+                dotStyle={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: 5,
+                  borderWidth: 1,
+                  borderColor: Colors.activeDotColor,
+                  backgroundColor: Colors.activeDotColor,
+                }}
+                inactiveDotStyle={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: 5,
+                  borderWidth: 1,
+                  borderColor: Colors.borderColor,
+                  backgroundColor: Colors.borderColor,
+                }}
+                // tappableDots={true}
+                inactiveDotOpacity={1}
+                inactiveDotScale={0.7}
+              />
+            </View>
 
             <Text numberOfLines={3} style={styles.discriptionText}>
               {
@@ -135,62 +151,11 @@ export default function BookingScreen() {
               </View>
             </View>
 
-            <TouchableOpacity onPress={() => { }}>
-              <View style={styles.viewContainer}>
-                <Text style={styles.viewText}>View</Text>
-                <View style={styles.viewButton}>
-                  <Image
-                    style={styles.viewIcon}
-                    source={Images.forwardIcon}
-                  ></Image>
-                </View>
-              </View>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.subContainer}>
-            <View style={styles.titleContainer}>
-              <Text style={styles.titleContainerText}>
-                Waterfall Residences
-              </Text>
-            </View>
-
-            <Image
-              style={{
-                height: 110,
-                borderRadius: 10,
-                margin: 10,
-                resizeMode: 'cover',
+            <TouchableOpacity
+              onPress={() => {
+                Actions.push(ScreenName.BookingDetailScreen);
               }}
-              source={{
-                uri: "https://plus.unsplash.com/premium_photo-1689977871600-e755257fb5f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
-              }}
-            ></Image>
-
-            <Text numberOfLines={3} style={styles.discriptionText}>
-              {
-                "Japanese landscaping emphasizes natural elements, eschewing artificial ornamentation."
-              }
-            </Text>
-
-            <View style={styles.boxContainer}>
-              <View style={styles.boxSubContainer}>
-                <Text style={styles.boxTitleText}>Project Type</Text>
-                <Text style={styles.boxSubTitleText}>3 LDK</Text>
-              </View>
-              <View style={styles.verticalDivider}></View>
-              <View style={styles.boxSubContainer}>
-                <Text style={styles.boxTitleText}>Unit Type</Text>
-                <Text style={styles.boxSubTitleText}>3 BHK</Text>
-              </View>
-              <View style={styles.verticalDivider}></View>
-              <View style={styles.boxSubContainer}>
-                <Text style={styles.boxTitleText}>Unit No</Text>
-                <Text style={styles.boxSubTitleText}>UN502</Text>
-              </View>
-            </View>
-
-            <TouchableOpacity onPress={() => { }}>
+            >
               <View style={styles.viewContainer}>
                 <Text style={styles.viewText}>View</Text>
                 <View style={styles.viewButton}>

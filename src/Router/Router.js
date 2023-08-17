@@ -10,6 +10,7 @@ import RaiseTicketScreen from "../Container/MainFlow/RaiseTicketScreen";
 import HomeScreen from "../Container/MainFlow/HomeScreen";
 import ContactUsScreen from "../Container/MainFlow/ContactUsScreen";
 import BookingScreen from "../Container/MainFlow/BookingScreen";
+import BookingDetailScreen from "../Container/MainFlow/BookingDetailScreen";
 
 export default function RouterComponent({ isAuthed }) {
   const backAction = () => {
@@ -64,6 +65,11 @@ export default function RouterComponent({ isAuthed }) {
             <Scene
               key={ScreenName.BookingScreen}
               component={BookingScreen}
+              hideNavBar={true}
+            />
+            <Scene
+              key={ScreenName.BookingDetailScreen}
+              component={BookingDetailScreen}
               hideNavBar={true}
             />
           </Stack>

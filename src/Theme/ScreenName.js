@@ -5,6 +5,7 @@ const ScreenName = {
   HomeScreen: "HomeScreen",
   ContactUsScreen: "ContactUsScreen",
   BookingScreen: "BookingScreen",
+  BookingDetailScreen: "BookingDetailScreen",
 };
 
 export default ScreenName;
