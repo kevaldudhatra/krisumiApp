@@ -156,6 +156,7 @@ export default function HomeScreen() {
             onCameraPress={onCameraPress}
           /> */}
         </View>
+
         <View style={styles.bottomContainer}>
           <Image
             style={styles.bottomImage}

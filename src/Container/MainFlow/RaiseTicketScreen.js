@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
-import {Colors, Fonts, Images} from '../../Theme/Index';
-import {Actions} from 'react-native-router-flux';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import React, { useState } from 'react';
+import { Colors, Fonts, Images } from '../../Theme/Index';
+import { Actions } from 'react-native-router-flux';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
   StyleSheet,
   Text,
@@ -21,7 +21,7 @@ export default function RaiseTicketScreen() {
   const [query, setQuery] = useState();
 
   return (
-    <KeyboardAwareScrollView style={{flex: 1, backgroundColor: Colors.white}}>
+    <KeyboardAwareScrollView style={{ flex: 1, backgroundColor: Colors.white }}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View>
           <View style={styles.mainContainer}>
@@ -48,7 +48,7 @@ export default function RaiseTicketScreen() {
               }}
               value={name}
               placeholderTextColor={Colors.borderColor}
-              placeholderStyle={{fontFamily: Fonts.DMSansRegular}}
+              placeholderStyle={{ fontFamily: Fonts.DMSansRegular }}
               placeholder="Enter Your Name"
               keyboardType="default"
             />
@@ -61,7 +61,7 @@ export default function RaiseTicketScreen() {
               }}
               value={phoneNo}
               placeholderTextColor={Colors.borderColor}
-              placeholderStyle={{fontFamily: Fonts.DMSansRegular}}
+              placeholderStyle={{ fontFamily: Fonts.DMSansRegular }}
               placeholder="+91"
               keyboardType="name-phone-pad"
             />
@@ -74,7 +74,7 @@ export default function RaiseTicketScreen() {
               }}
               value={email}
               placeholderTextColor={Colors.borderColor}
-              placeholderStyle={{fontFamily: Fonts.DMSansRegular}}
+              placeholderStyle={{ fontFamily: Fonts.DMSansRegular }}
               placeholder="Enter Your Email"
               keyboardType="email-address"
             />
@@ -87,7 +87,7 @@ export default function RaiseTicketScreen() {
               }}
               value={custId}
               placeholderTextColor={Colors.borderColor}
-              placeholderStyle={{fontFamily: Fonts.DMSansRegular}}
+              placeholderStyle={{ fontFamily: Fonts.DMSansRegular }}
               placeholder="Enter Your ID"
               keyboardType="default"
             />
@@ -100,14 +100,14 @@ export default function RaiseTicketScreen() {
                 }}
                 value={query}
                 placeholderTextColor={Colors.borderColor}
-                placeholderStyle={{fontFamily: Fonts.DMSansRegular}}
+                placeholderStyle={{ fontFamily: Fonts.DMSansRegular }}
                 multiline={true}
                 placeholder="Enter Your Query"
                 keyboardType="default"
               />
             </View>
 
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => { }}>
               <View style={styles.ticketButton}>
                 <Text style={styles.ticketButtonText}>Generate A Ticket</Text>
               </View>

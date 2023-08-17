@@ -161,9 +161,9 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   bottomImage: {
-    height: 210,
-    width: "75%",
-    resizeMode: "cover",
+    height: 150,
+    width: '75%',
+    resizeMode: 'cover',
     alignSelf: "flex-start",
   },
   emailText: {
