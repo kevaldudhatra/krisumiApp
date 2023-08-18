@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Colors, Fonts, Images, ScreenName } from "../../Theme/Index";
 import { Actions } from "react-native-router-flux";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import {
   StyleSheet,
@@ -10,6 +9,7 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
+  ScrollView,
 } from "react-native";
 
 export default function BookingScreen() {
@@ -47,141 +47,217 @@ export default function BookingScreen() {
   };
 
   return (
-    <KeyboardAwareScrollView style={{ flex: 1, backgroundColor: Colors.white }}>
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: Colors.white,
-          justifyContent: "space-between",
-          flexDirection: "column",
-        }}
-      >
-        <View style={styles.mainContainer}>
-          <View style={styles.bookingHeader}>
-            <TouchableOpacity
-              onPress={() => {
-                Actions.pop();
-              }}
-            >
-              <View style={styles.backButton}>
-                <Image
-                  style={styles.backIcon}
-                  source={Images.backwardIcon}
-                ></Image>
-              </View>
-            </TouchableOpacity>
-            <Text style={styles.bookingHeaderText}>Booking Detail</Text>
-            <View style={styles.blankButton}></View>
-          </View>
-
-          <Text style={styles.titleText}>Booked Units</Text>
-
-          <Text style={styles.subTitleText}>
-            Booking Code : WFR/TB/3F/UN502
-          </Text>
-
-          <View style={styles.subContainer}>
-            <View style={styles.titleContainer}>
-              <Text style={styles.titleContainerText}>
-                Waterfall Residences
-              </Text>
+    <ScrollView
+      contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.white }}
+    >
+      <View style={styles.mainContainer}>
+        <View style={styles.bookingHeader}>
+          <TouchableOpacity
+            onPress={() => {
+              Actions.pop();
+            }}
+          >
+            <View style={styles.backButton}>
+              <Image
+                style={styles.backIcon}
+                source={Images.backwardIcon}
+              ></Image>
             </View>
-
-            <View style={{ alignSelf: "center", flex: 1 }}>
-              <Carousel
-                // ref={isCarousel}
-                data={data}
-                renderItem={renderItem}
-                sliderWidth={Dimensions.get("window").width - 40}
-                itemWidth={Dimensions.get("window").width - 40}
-                onSnapToItem={(index) => setIndex(index)}
-              />
-              <Pagination
-                dotsLength={data.length}
-                activeDotIndex={index}
-                // carouselRef={isCarousel}
-                containerStyle={{
-                  paddingTop: 15,
-                  paddingBottom: 10,
-                  width: data.length * 10 + 20,
-                  alignSelf: "center",
-                }}
-                dotStyle={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: 5,
-                  borderWidth: 1,
-                  borderColor: Colors.activeDotColor,
-                  backgroundColor: Colors.activeDotColor,
-                }}
-                inactiveDotStyle={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: 5,
-                  borderWidth: 1,
-                  borderColor: Colors.borderColor,
-                  backgroundColor: Colors.borderColor,
-                }}
-                // tappableDots={true}
-                inactiveDotOpacity={1}
-                inactiveDotScale={0.7}
-              />
-            </View>
-
-            <Text numberOfLines={3} style={styles.discriptionText}>
-              {
-                "Japanese landscaping emphasizes natural elements, eschewing artificial ornamentation."
-              }
-            </Text>
-
-            <View style={styles.boxContainer}>
-              <View style={styles.boxSubContainer}>
-                <Text style={styles.boxTitleText}>Project Type</Text>
-                <Text style={styles.boxSubTitleText}>3 LDK</Text>
-              </View>
-              <View style={styles.verticalDivider}></View>
-              <View style={styles.boxSubContainer}>
-                <Text style={styles.boxTitleText}>Unit Type</Text>
-                <Text style={styles.boxSubTitleText}>3 BHK</Text>
-              </View>
-              <View style={styles.verticalDivider}></View>
-              <View style={styles.boxSubContainer}>
-                <Text style={styles.boxTitleText}>Unit No</Text>
-                <Text style={styles.boxSubTitleText}>UN502</Text>
-              </View>
-            </View>
-
-            <TouchableOpacity
-              onPress={() => {
-                Actions.push(ScreenName.BookingDetailScreen);
-              }}
-            >
-              <View style={styles.viewContainer}>
-                <Text style={styles.viewText}>View</Text>
-                <View style={styles.viewButton}>
-                  <Image
-                    style={styles.viewIcon}
-                    source={Images.forwardIcon}
-                  ></Image>
-                </View>
-              </View>
-            </TouchableOpacity>
-          </View>
-
-          <Image style={styles.topImage} source={Images.topBackgroung}></Image>
+          </TouchableOpacity>
+          <Text style={styles.bookingHeaderText}>Booking Detail</Text>
+          <View style={styles.blankButton}></View>
         </View>
 
-        <Image
-          style={styles.bottomImage}
-          source={Images.bottomBackgroung}
-        ></Image>
+        <Text style={styles.titleText}>Booked Units</Text>
+
+        <Text style={styles.subTitleText}>Booking Code : WFR/TB/3F/UN502</Text>
+
+        <View style={styles.subContainer}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.titleContainerText}>Waterfall Residences</Text>
+          </View>
+
+          <View style={{ alignSelf: "center", flex: 1 }}>
+            <Carousel
+              // ref={isCarousel}
+              data={data}
+              renderItem={renderItem}
+              sliderWidth={Dimensions.get("window").width - 40}
+              itemWidth={Dimensions.get("window").width - 40}
+              onSnapToItem={(index) => setIndex(index)}
+            />
+            <Pagination
+              dotsLength={data.length}
+              activeDotIndex={index}
+              // carouselRef={isCarousel}
+              containerStyle={{
+                paddingTop: 15,
+                paddingBottom: 10,
+                width: data.length * 10 + 20,
+                alignSelf: "center",
+              }}
+              dotStyle={{
+                width: 10,
+                height: 10,
+                borderRadius: 5,
+                borderWidth: 1,
+                borderColor: Colors.activeDotColor,
+                backgroundColor: Colors.activeDotColor,
+              }}
+              inactiveDotStyle={{
+                width: 10,
+                height: 10,
+                borderRadius: 5,
+                borderWidth: 1,
+                borderColor: Colors.borderColor,
+                backgroundColor: Colors.borderColor,
+              }}
+              // tappableDots={true}
+              inactiveDotOpacity={1}
+              inactiveDotScale={0.7}
+            />
+          </View>
+
+          <Text numberOfLines={3} style={styles.discriptionText}>
+            {
+              "Japanese landscaping emphasizes natural elements, eschewing artificial ornamentation."
+            }
+          </Text>
+
+          <View style={styles.boxContainer}>
+            <View style={styles.boxSubContainer}>
+              <Text style={styles.boxTitleText}>Project Type</Text>
+              <Text style={styles.boxSubTitleText}>3 LDK</Text>
+            </View>
+            <View style={styles.verticalDivider}></View>
+            <View style={styles.boxSubContainer}>
+              <Text style={styles.boxTitleText}>Unit Type</Text>
+              <Text style={styles.boxSubTitleText}>3 BHK</Text>
+            </View>
+            <View style={styles.verticalDivider}></View>
+            <View style={styles.boxSubContainer}>
+              <Text style={styles.boxTitleText}>Unit No</Text>
+              <Text style={styles.boxSubTitleText}>UN502</Text>
+            </View>
+          </View>
+
+          <TouchableOpacity
+            onPress={() => {
+              Actions.push(ScreenName.BookingDetailScreen);
+            }}
+          >
+            <View style={styles.viewContainer}>
+              <Text style={styles.viewText}>View</Text>
+              <View style={styles.viewButton}>
+                <Image
+                  style={styles.viewIcon}
+                  source={Images.forwardIcon}
+                ></Image>
+              </View>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.subContainer}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.titleContainerText}>Waterfall Residences</Text>
+          </View>
+
+          <View style={{ alignSelf: "center", flex: 1 }}>
+            <Carousel
+              // ref={isCarousel}
+              data={data}
+              renderItem={renderItem}
+              sliderWidth={Dimensions.get("window").width - 40}
+              itemWidth={Dimensions.get("window").width - 40}
+              onSnapToItem={(index) => setIndex(index)}
+            />
+            <Pagination
+              dotsLength={data.length}
+              activeDotIndex={index}
+              // carouselRef={isCarousel}
+              containerStyle={{
+                paddingTop: 15,
+                paddingBottom: 10,
+                width: data.length * 10 + 20,
+                alignSelf: "center",
+              }}
+              dotStyle={{
+                width: 10,
+                height: 10,
+                borderRadius: 5,
+                borderWidth: 1,
+                borderColor: Colors.activeDotColor,
+                backgroundColor: Colors.activeDotColor,
+              }}
+              inactiveDotStyle={{
+                width: 10,
+                height: 10,
+                borderRadius: 5,
+                borderWidth: 1,
+                borderColor: Colors.borderColor,
+                backgroundColor: Colors.borderColor,
+              }}
+              // tappableDots={true}
+              inactiveDotOpacity={1}
+              inactiveDotScale={0.7}
+            />
+          </View>
+
+          <Text numberOfLines={3} style={styles.discriptionText}>
+            {
+              "Japanese landscaping emphasizes natural elements, eschewing artificial ornamentation."
+            }
+          </Text>
+
+          <View style={styles.boxContainer}>
+            <View style={styles.boxSubContainer}>
+              <Text style={styles.boxTitleText}>Project Type</Text>
+              <Text style={styles.boxSubTitleText}>3 LDK</Text>
+            </View>
+            <View style={styles.verticalDivider}></View>
+            <View style={styles.boxSubContainer}>
+              <Text style={styles.boxTitleText}>Unit Type</Text>
+              <Text style={styles.boxSubTitleText}>3 BHK</Text>
+            </View>
+            <View style={styles.verticalDivider}></View>
+            <View style={styles.boxSubContainer}>
+              <Text style={styles.boxTitleText}>Unit No</Text>
+              <Text style={styles.boxSubTitleText}>UN502</Text>
+            </View>
+          </View>
+
+          <TouchableOpacity
+            onPress={() => {
+              Actions.push(ScreenName.BookingDetailScreen);
+            }}
+          >
+            <View style={styles.viewContainer}>
+              <Text style={styles.viewText}>View</Text>
+              <View style={styles.viewButton}>
+                <Image
+                  style={styles.viewIcon}
+                  source={Images.forwardIcon}
+                ></Image>
+              </View>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        <Image style={styles.topImage} source={Images.topBackgroung}></Image>
       </View>
-    </KeyboardAwareScrollView>
+
+      <Image
+        style={styles.bottomImage}
+        source={Images.bottomBackgroung}
+      ></Image>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   mainContainer: {
+    flex: 1,
     backgroundColor: Colors.white,
     justifyContent: "flex-start",
     paddingTop: 30,

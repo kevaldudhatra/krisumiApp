@@ -2,7 +2,6 @@ import React, { useState, useCallback } from "react";
 import { Colors, Fonts, Images, ScreenName } from "../../Theme/Index";
 import ImagePicker from "react-native-image-picker";
 import { Actions } from "react-native-router-flux";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
   Image,
   StyleSheet,
@@ -13,6 +12,7 @@ import {
   Pressable,
   Dimensions,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 
 export default function HomeScreen() {
@@ -65,113 +65,104 @@ export default function HomeScreen() {
   }
 
   return (
-    <KeyboardAwareScrollView style={{ flex: 1, backgroundColor: Colors.white }}>
-      <View
-        style={{
-          backgroundColor: Colors.white,
-          justifyContent: "space-between",
-          flexDirection: "column",
-        }}
-      >
-        <View style={styles.mainContainer}>
-          <Image style={styles.appNameImage} source={Images.appName}></Image>
+    <ScrollView
+      contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.white }}
+    >
+      <View style={styles.mainContainer}>
+        <Image style={styles.appNameImage} source={Images.appName}></Image>
 
-          <View style={styles.profilePictureContainer}>
+        <View style={styles.profilePictureContainer}>
+          <Image
+            style={styles.profilePicture}
+            source={{
+              uri: "https://plus.unsplash.com/premium_photo-1689977871600-e755257fb5f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+            }}
+          ></Image>
+          <View style={styles.addPicture}>
             <Image
-              style={styles.profilePicture}
-              source={{
-                uri: "https://plus.unsplash.com/premium_photo-1689977871600-e755257fb5f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
-              }}
+              style={styles.addPictureIcon}
+              source={Images.editIcon}
             ></Image>
-            <View style={styles.addPicture}>
+          </View>
+        </View>
+
+        <Text style={styles.userName}>Nitin Kumar Bhatia</Text>
+
+        <Text style={styles.userPhoneNumber}>9876543210</Text>
+
+        <TouchableOpacity
+          onPress={() => {
+            Actions.push(ScreenName.BookingScreen);
+          }}
+        >
+          <View style={styles.itemMainContainer}>
+            <View style={styles.itemSubContainer}>
+              <Text style={styles.itemText}>Booking Detail</Text>
+              <Image style={styles.itemIcon} source={Images.eventIcon}></Image>
+            </View>
+          </View>
+        </TouchableOpacity>
+
+        <View style={styles.itemMainContainer}>
+          <View style={styles.itemSubContainer}>
+            <Text style={styles.itemText}>Construction Update</Text>
+            <Image style={styles.itemIcon} source={Images.homeIcon}></Image>
+          </View>
+        </View>
+
+        <TouchableOpacity
+          onPress={() => {
+            Actions.push(ScreenName.ContactUsScreen);
+          }}
+        >
+          <View style={styles.itemMainContainer}>
+            <View style={styles.itemSubContainer}>
+              <Text style={styles.itemText}>Get In Touch</Text>
+              <Image style={styles.itemIcon} source={Images.mailIcon}></Image>
+            </View>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => {
+            Actions.push(ScreenName.LoginScreen);
+          }}
+        >
+          <View style={styles.subContainer}>
+            <Text style={styles.logoutText}>Logout</Text>
+            <View style={styles.logoutButton}>
               <Image
-                style={styles.addPictureIcon}
-                source={Images.editIcon}
+                style={styles.logoutIcon}
+                source={Images.forwardIcon}
               ></Image>
             </View>
           </View>
+        </TouchableOpacity>
 
-          <Text style={styles.userName}>Nitin Kumar Bhatia</Text>
+        <Image style={styles.topImage} source={Images.topBackgroung}></Image>
 
-          <Text style={styles.userPhoneNumber}>9876543210</Text>
+        {/* <ImagePickerModal
+          isVisible={visible}
+          onClose={() => setVisible(false)}
+          onImageLibraryPress={onImageLibraryPress}
+          onCameraPress={onCameraPress}
+        /> */}
+      </View>
 
-          <TouchableOpacity
-            onPress={() => {
-              Actions.push(ScreenName.BookingScreen);
-            }}
-          >
-            <View style={styles.itemMainContainer}>
-              <View style={styles.itemSubContainer}>
-                <Text style={styles.itemText}>Booking Detail</Text>
-                <Image
-                  style={styles.itemIcon}
-                  source={Images.eventIcon}
-                ></Image>
-              </View>
-            </View>
-          </TouchableOpacity>
-
-          <View style={styles.itemMainContainer}>
-            <View style={styles.itemSubContainer}>
-              <Text style={styles.itemText}>Construction Update</Text>
-              <Image style={styles.itemIcon} source={Images.homeIcon}></Image>
-            </View>
-          </View>
-
-          <TouchableOpacity
-            onPress={() => {
-              Actions.push(ScreenName.ContactUsScreen);
-            }}
-          >
-            <View style={styles.itemMainContainer}>
-              <View style={styles.itemSubContainer}>
-                <Text style={styles.itemText}>Get In Touch</Text>
-                <Image style={styles.itemIcon} source={Images.mailIcon}></Image>
-              </View>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => {
-              Actions.push(ScreenName.LoginScreen);
-            }}
-          >
-            <View style={styles.subContainer}>
-              <Text style={styles.logoutText}>Logout</Text>
-              <View style={styles.logoutButton}>
-                <Image
-                  style={styles.logoutIcon}
-                  source={Images.forwardIcon}
-                ></Image>
-              </View>
-            </View>
-          </TouchableOpacity>
-
-          <Image style={styles.topImage} source={Images.topBackgroung}></Image>
-
-          {/* <ImagePickerModal
-            isVisible={visible}
-            onClose={() => setVisible(false)}
-            onImageLibraryPress={onImageLibraryPress}
-            onCameraPress={onCameraPress}
-          /> */}
-        </View>
-
-        <View style={styles.bottomContainer}>
+      <View style={styles.bottomContainer}>
+        <Image
+          style={styles.bottomImage}
+          source={Images.bottomBackgroung}
+        ></Image>
+        <View style={styles.bottomSubContainer}>
           <Image
-            style={styles.bottomImage}
-            source={Images.bottomBackgroung}
+            style={styles.whatsAppIcon}
+            source={Images.whatsAppIcon}
           ></Image>
-          <View style={styles.bottomSubContainer}>
-            <Image
-              style={styles.whatsAppIcon}
-              source={Images.whatsAppIcon}
-            ></Image>
-            <Image style={styles.phoneIcon} source={Images.phoneIcon}></Image>
-          </View>
+          <Image style={styles.phoneIcon} source={Images.phoneIcon}></Image>
         </View>
       </View>
-    </KeyboardAwareScrollView>
+    </ScrollView>
   );
 }
 
@@ -319,7 +310,6 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   bottomContainer: {
-    flex: 1,
     backgroundColor: Colors.white,
     justifyContent: "space-between",
     flexDirection: "row",

@@ -1,8 +1,16 @@
 import React, { useState } from "react";
 import { Colors, Fonts, Images } from "../../Theme/Index";
 import { Actions } from "react-native-router-flux";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  FlatList,
+  Dimensions,
+  ScrollView,
+} from "react-native";
 
 export default function BookingDetailScreen() {
   const [tabIndex, setTabIndex] = useState(1);
@@ -10,87 +18,103 @@ export default function BookingDetailScreen() {
   const tabData = [
     {
       id: 1,
-      tabName: "Booking Detail"
+      tabName: "Booking Detail",
     },
     {
       id: 2,
-      tabName: "Unit Summary"
+      tabName: "Unit Summary",
     },
     {
       id: 3,
-      tabName: "Payment History"
-    }
+      tabName: "Payment History",
+    },
   ];
 
   const renderItem = ({ item }) => {
     return (
-      <View style={{ height: 55, backgroundColor: item.id == tabIndex ? Colors.lightOrange : Colors.white, paddingHorizontal: 15, borderTopLeftRadius: 10, borderTopRightRadius: 10, justifyContent: "center" }}>
-        <TouchableOpacity onPress={() => {
-          setTabIndex(item.id);
-        }}>
-          <Text style={{
-            fontSize: 14,
-            fontFamily: Fonts.RobotoMedium,
-            color: item.id == tabIndex ? Colors.arrowColor : Colors.black,
-            alignSelf: "center",
-          }}>{item.tabName}</Text>
+      <View
+        style={{
+          height: 55,
+          backgroundColor:
+            item.id == tabIndex ? Colors.lightOrange : Colors.white,
+          paddingHorizontal: 15,
+          borderTopLeftRadius: 10,
+          borderTopRightRadius: 10,
+          justifyContent: "center",
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => {
+            setTabIndex(item.id);
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 14,
+              fontFamily: Fonts.RobotoMedium,
+              color: item.id == tabIndex ? Colors.arrowColor : Colors.black,
+              alignSelf: "center",
+            }}
+          >
+            {item.tabName}
+          </Text>
         </TouchableOpacity>
       </View>
     );
   };
 
   return (
-    <KeyboardAwareScrollView style={{ flex: 1, backgroundColor: Colors.white }}>
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: Colors.white,
-          justifyContent: "space-between",
-          flexDirection: "column",
-        }}
-      >
-        <View style={styles.mainContainer}>
+    <ScrollView
+      contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.white }}
+    >
+      <View style={styles.mainContainer}>
+        <View style={styles.bookingHeader}>
+          <TouchableOpacity
+            onPress={() => {
+              Actions.pop();
+            }}
+          >
+            <View style={styles.backButton}>
+              <Image
+                style={styles.backIcon}
+                source={Images.backwardIcon}
+              ></Image>
+            </View>
+          </TouchableOpacity>
+          <Text style={styles.bookingHeaderText}>Booking Detail</Text>
+          <View style={styles.blankButton}></View>
+        </View>
 
-          <View style={styles.bookingHeader}>
-            <TouchableOpacity
-              onPress={() => {
-                Actions.pop();
-              }}
-            >
-              <View style={styles.backButton}>
-                <Image
-                  style={styles.backIcon}
-                  source={Images.backwardIcon}
-                ></Image>
-              </View>
-            </TouchableOpacity>
-            <Text style={styles.bookingHeaderText}>Booking Detail</Text>
-            <View style={styles.blankButton}></View>
-          </View>
+        {tabIndex != 2 && (
+          <Text style={styles.titleText}>Waterfall Residencess</Text>
+        )}
 
-          {tabIndex != 2 && <Text style={styles.titleText}>Waterfall Residencess</Text>}
+        <Text style={styles.subTitleText}>Booking Code : WFR/TB/3F/UN502</Text>
 
-          <Text style={styles.subTitleText}>
-            Booking Code : WFR/TB/3F/UN502
-          </Text>
-
+        <View style={{ height: 70 }}>
           <FlatList
             paddingTop={15}
             showsHorizontalScrollIndicator={false}
             data={tabData}
             renderItem={renderItem}
-            keyExtractor={item => item.id}
+            keyExtractor={(item) => item.id}
             horizontal={true}
           />
+        </View>
 
-          <View style={{ height: 1, backgroundColor: Colors.black }}></View>
+        <View style={{ height: 1, backgroundColor: Colors.black }}></View>
 
-          {tabIndex == 1 ? <Text style={styles.reportDateText}></Text> : <Text style={styles.reportDateText}>
+        {tabIndex == 1 ? (
+          <Text style={styles.reportDateText}></Text>
+        ) : (
+          <Text style={styles.reportDateText}>
             Report Generated On - 23/10/2021
-          </Text>}
+          </Text>
+        )}
 
-          <View>
-            {tabIndex == 1 ? <View style={styles.mainBoxContainer}>
+        <View>
+          {tabIndex == 1 ? (
+            <View style={styles.mainBoxContainer}>
               <View style={styles.mainBoxSection}>
                 <View style={styles.subBoxContainer}>
                   <Text style={styles.boxText1}>Booking Date</Text>
@@ -130,10 +154,14 @@ export default function BookingDetailScreen() {
                 </View>
                 <View style={styles.verticalDivider}></View>
                 <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText2}>{`Possession Link\nPlan (20:80)`}</Text>
+                  <Text
+                    style={styles.boxText2}
+                  >{`Possession Link\nPlan (20:80)`}</Text>
                 </View>
               </View>
-            </View> : tabIndex == 2 ? <View style={styles.mainBoxContainer}>
+            </View>
+          ) : tabIndex == 2 ? (
+            <View style={styles.mainBoxContainer}>
               <View style={styles.mainBoxSection}>
                 <View style={styles.subBoxContainer}>
                   <Text style={styles.boxText1}>Project Type</Text>
@@ -176,7 +204,9 @@ export default function BookingDetailScreen() {
                   <Text style={styles.boxText2}>1,800 sq.ft.</Text>
                 </View>
               </View>
-            </View> : tabIndex == 3 ? <View style={styles.mainBoxContainer}>
+            </View>
+          ) : tabIndex == 3 ? (
+            <View style={styles.mainBoxContainer}>
               <View style={styles.mainBoxSection}>
                 <View style={styles.subBoxContainer}>
                   <Text style={styles.boxText1}>Payment Mode</Text>
@@ -216,10 +246,14 @@ export default function BookingDetailScreen() {
                 </View>
                 <View style={styles.verticalDivider}></View>
                 <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText2}>{`Possession Link\nPlan (20:80)`}</Text>
+                  <Text
+                    style={styles.boxText2}
+                  >{`Possession Link\nPlan (20:80)`}</Text>
                 </View>
               </View>
-            </View> : <View style={styles.mainBoxContainer}>
+            </View>
+          ) : (
+            <View style={styles.mainBoxContainer}>
               <View style={styles.mainBoxSection}>
                 <View style={styles.subBoxContainer}>
                   <Text style={styles.boxText1}>Booking Date</Text>
@@ -259,36 +293,38 @@ export default function BookingDetailScreen() {
                 </View>
                 <View style={styles.verticalDivider}></View>
                 <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText2}>{`Possession Link\nPlan (20:80)`}</Text>
+                  <Text
+                    style={styles.boxText2}
+                  >{`Possession Link\nPlan (20:80)`}</Text>
                 </View>
               </View>
-            </View>}
-          </View>
-
-          <Image style={styles.topImage} source={Images.topBackgroung}></Image>
+            </View>
+          )}
         </View>
 
-        <View style={styles.bottomContainer}>
-          <Image
-            style={styles.bottomImage}
-            source={Images.bottomBackgroung}
-          ></Image>
-          <View style={styles.bottomSubContainer}>
-            <Image
-              style={styles.whatsAppIcon}
-              source={Images.whatsAppIcon}
-            ></Image>
-            <Image style={styles.phoneIcon} source={Images.phoneIcon}></Image>
-          </View>
-        </View>
-
+        <Image style={styles.topImage} source={Images.topBackgroung}></Image>
       </View>
-    </KeyboardAwareScrollView>
+
+      <View style={styles.bottomContainer}>
+        <Image
+          style={styles.bottomImage}
+          source={Images.bottomBackgroung}
+        ></Image>
+        <View style={styles.bottomSubContainer}>
+          <Image
+            style={styles.whatsAppIcon}
+            source={Images.whatsAppIcon}
+          ></Image>
+          <Image style={styles.phoneIcon} source={Images.phoneIcon}></Image>
+        </View>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   mainContainer: {
+    flex: 1,
     backgroundColor: Colors.white,
     justifyContent: "flex-start",
     paddingTop: 30,
@@ -348,12 +384,42 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     marginVertical: 15,
   },
-  mainBoxContainer: { height: 243, backgroundColor: Colors.backgroundColor, borderColor: Colors.borderColor, borderWidth: 1, borderRadius: 10 },
-  mainBoxSection: { height: 60, width: Dimensions.get('window').width - 40, flexDirection: "row", justifyContent: "flex-start" },
-  subBoxContainer: { flex: 0.5, height: 60, justifyContent: "center", paddingHorizontal: 20 },
-  boxText1: { alignSelf: "flex-start", fontSize: 14, fontFamily: Fonts.RobotoMedium, color: Colors.black },
-  boxText2: { alignSelf: "flex-start", fontSize: 14, fontFamily: Fonts.RobotoMedium, color: Colors.goldColorText },
-  verticalDivider: { height: 60, width: 1, backgroundColor: Colors.borderColor },
+  mainBoxContainer: {
+    height: 243,
+    backgroundColor: Colors.backgroundColor,
+    borderColor: Colors.borderColor,
+    borderWidth: 1,
+    borderRadius: 10,
+  },
+  mainBoxSection: {
+    height: 60,
+    width: Dimensions.get("window").width - 40,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+  },
+  subBoxContainer: {
+    flex: 0.5,
+    height: 60,
+    justifyContent: "center",
+    paddingHorizontal: 20,
+  },
+  boxText1: {
+    alignSelf: "flex-start",
+    fontSize: 14,
+    fontFamily: Fonts.RobotoMedium,
+    color: Colors.black,
+  },
+  boxText2: {
+    alignSelf: "flex-start",
+    fontSize: 14,
+    fontFamily: Fonts.RobotoMedium,
+    color: Colors.goldColorText,
+  },
+  verticalDivider: {
+    height: 60,
+    width: 1,
+    backgroundColor: Colors.borderColor,
+  },
   horizontalDivider: { height: 1, backgroundColor: Colors.borderColor },
   topImage: {
     position: "absolute",
@@ -369,7 +435,6 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   bottomContainer: {
-    flex: 1,
     backgroundColor: Colors.white,
     justifyContent: "space-between",
     flexDirection: "row",

@@ -12,6 +12,7 @@ import {
   Keyboard,
   Dimensions,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 
 export default function LoginScreen() {
@@ -19,94 +20,85 @@ export default function LoginScreen() {
   const [password, setPassword] = useState();
 
   return (
-    <KeyboardAwareScrollView style={{ flex: 1, backgroundColor: Colors.white }}>
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: Colors.white,
-          justifyContent: "space-between",
-          flexDirection: "column",
-        }}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.mainContainer}>
-            <View style={styles.loginHeader}>
-              <TouchableOpacity
-                onPress={() => {
-                  Actions.pop();
-                }}
-              >
-                <View style={styles.backButton}>
-                  <Image
-                    style={styles.backIcon}
-                    source={Images.backwardIcon}
-                  ></Image>
-                </View>
-              </TouchableOpacity>
-              <Text style={styles.loginText}>Login</Text>
-              <View style={styles.blankButton}></View>
-            </View>
-            <Image style={styles.appNameImage} source={Images.appName}></Image>
-            <Text style={styles.emailText}>Email</Text>
-            <TextInput
-              style={styles.emailInput}
-              onChangeText={(text) => {
-                setEmail(text);
-              }}
-              value={email}
-              placeholderTextColor={Colors.borderColor}
-              placeholderStyle={{ fontFamily: Fonts.DMSansRegular }}
-              placeholder="Enter Your Email"
-              keyboardType="email-address"
-            />
-            <Text style={styles.passwordText}>Password</Text>
-            <TextInput
-              style={styles.emailInput}
-              onChangeText={(text) => {
-                setPassword(text);
-              }}
-              value={password}
-              placeholderTextColor={Colors.borderColor}
-              placeholderStyle={{ fontFamily: Fonts.DMSansRegular }}
-              placeholder="Enter Your Password"
-              keyboardType="default"
-            />
+    <ScrollView
+      contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.white }}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.mainContainer}>
+          <View style={styles.loginHeader}>
             <TouchableOpacity
               onPress={() => {
-                Actions.push(ScreenName.HomeScreen);
+                Actions.pop();
               }}
             >
-              <View style={styles.loginButton}>
-                <Text style={styles.loginButtonText}>Login</Text>
+              <View style={styles.backButton}>
+                <Image
+                  style={styles.backIcon}
+                  source={Images.backwardIcon}
+                ></Image>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                Actions.push(ScreenName.RaiseTicketScreen);
-              }}
-            >
-              <View style={styles.bottomText}>
-                <Text style={styles.changePasswordText}>Change Password?</Text>
-                <Text style={styles.raiseTicketText}>Raise A Ticket</Text>
-              </View>
-            </TouchableOpacity>
-            <Image
-              style={styles.topImage}
-              source={Images.topBackgroung}
-            ></Image>
+            <Text style={styles.loginText}>Login</Text>
+            <View style={styles.blankButton}></View>
           </View>
-        </TouchableWithoutFeedback>
-        <Image
-          style={styles.bottomImage}
-          source={Images.bottomBackgroung}
-        ></Image>
-      </View>
-    </KeyboardAwareScrollView>
+          <Image style={styles.appNameImage} source={Images.appName}></Image>
+          <Text style={styles.emailText}>Email</Text>
+          <TextInput
+            style={styles.emailInput}
+            onChangeText={(text) => {
+              setEmail(text);
+            }}
+            value={email}
+            placeholderTextColor={Colors.borderColor}
+            placeholderStyle={{ fontFamily: Fonts.DMSansRegular }}
+            placeholder="Enter Your Email"
+            keyboardType="email-address"
+          />
+          <Text style={styles.passwordText}>Password</Text>
+          <TextInput
+            style={styles.emailInput}
+            onChangeText={(text) => {
+              setPassword(text);
+            }}
+            value={password}
+            placeholderTextColor={Colors.borderColor}
+            placeholderStyle={{ fontFamily: Fonts.DMSansRegular }}
+            placeholder="Enter Your Password"
+            keyboardType="default"
+          />
+          <TouchableOpacity
+            onPress={() => {
+              Actions.push(ScreenName.HomeScreen);
+            }}
+          >
+            <View style={styles.loginButton}>
+              <Text style={styles.loginButtonText}>Login</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              Actions.push(ScreenName.RaiseTicketScreen);
+            }}
+          >
+            <View style={styles.bottomText}>
+              <Text style={styles.changePasswordText}>Change Password?</Text>
+              <Text style={styles.raiseTicketText}>Raise A Ticket</Text>
+            </View>
+          </TouchableOpacity>
+          <Image style={styles.topImage} source={Images.topBackgroung}></Image>
+        </View>
+      </TouchableWithoutFeedback>
+      <Image
+        style={styles.bottomImage}
+        source={Images.bottomBackgroung}
+      ></Image>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   mainContainer: {
+    flex: 1,
     width: Dimensions.get("window").width,
     backgroundColor: Colors.white,
     justifyContent: "flex-start",
@@ -162,8 +154,8 @@ const styles = StyleSheet.create({
   },
   bottomImage: {
     height: 150,
-    width: '75%',
-    resizeMode: 'cover',
+    width: "75%",
+    resizeMode: "cover",
     alignSelf: "flex-start",
   },
   emailText: {
