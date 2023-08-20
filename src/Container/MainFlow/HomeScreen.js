@@ -1,168 +1,196 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import { Colors, Fonts, Images, ScreenName } from "../../Theme/Index";
-import ImagePicker from "react-native-image-picker";
 import { Actions } from "react-native-router-flux";
+import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import {
   Image,
   StyleSheet,
   Text,
   View,
-  Modal,
-  SafeAreaView,
-  Pressable,
   Dimensions,
   TouchableOpacity,
   ScrollView,
 } from "react-native";
 
 export default function HomeScreen() {
-  const [pickerResponse, setPickerResponse] = useState(null);
-  const [visible, setVisible] = useState(false);
+  const [showModel, setShowModel] = useState(false);
+  const [image, setImage] = useState(null);
 
-  const onImageLibraryPress = useCallback(() => {
-    const options = {
-      selectionLimit: 1,
-      mediaType: "photo",
-      includeBase64: false,
-    };
-    ImagePicker.launchImageLibrary(options, setPickerResponse);
-  }, []);
-
-  const onCameraPress = useCallback(() => {
-    const options = {
-      saveToPhotos: true,
-      mediaType: "photo",
-      includeBase64: false,
-    };
-    ImagePicker.launchCamera(options, setPickerResponse);
-  }, []);
-
-  function ImagePickerModal({
-    isVisible,
-    onClose,
-    onImageLibraryPress,
-    onCameraPress,
-  }) {
+  function imagePickerOption() {
     return (
-      <Modal
-        isVisible={isVisible}
-        onBackButtonPress={onClose}
-        onBackdropPress={onClose}
-        style={styles.modal}
-      >
-        <SafeAreaView style={styles.buttons}>
-          <Pressable style={styles.button} onPress={onImageLibraryPress}>
-            <Image style={styles.buttonIcon} source={Images.forwardIcon} />
-            <Text style={styles.buttonText}>Library</Text>
-          </Pressable>
-          <Pressable style={styles.button} onPress={onCameraPress}>
-            <Image style={styles.buttonIcon} source={Images.forwardIcon} />
-            <Text style={styles.buttonText}>Camera</Text>
-          </Pressable>
-        </SafeAreaView>
-      </Modal>
+      <View style={styles.modelView}>
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            justifyContent: "center",
+          }}
+          onPress={() => {
+            setShowModel(false);
+            onPressGallery();
+          }}
+        >
+          <View style={styles.galleryAndCameraView}>
+            <Image
+              style={styles.galleryAndCameraIcon}
+              source={Images.galleryIcon}
+            ></Image>
+            <Text style={styles.galleryAndCameraText}>Gallery</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            justifyContent: "center",
+          }}
+          onPress={() => {
+            setShowModel(false);
+            onPressCamera();
+          }}
+        >
+          <View style={styles.galleryAndCameraView}>
+            <Image
+              style={styles.galleryAndCameraIcon}
+              source={Images.cameraIcon}
+            ></Image>
+            <Text style={styles.galleryAndCameraText}>Camera</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
     );
   }
 
+  async function onPressGallery() {
+    const result = await launchImageLibrary({
+      mediaType: "photo",
+      selectionLimit: 1,
+    });
+    if (result.didCancel) {
+      setImage(null);
+    } else {
+      setImage(result.assets[0].uri);
+    }
+  }
+
+  async function onPressCamera() {
+    const result = await launchCamera({
+      mediaType: "photo",
+      selectionLimit: 1,
+    });
+    if (result.didCancel) {
+      setImage(null);
+    } else {
+      setImage(result.assets[0].uri);
+    }
+  }
+
   return (
-    <ScrollView
-      contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.white }}
-    >
-      <View style={styles.mainContainer}>
-        <Image style={styles.appNameImage} source={Images.appName}></Image>
+    <>
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.white }}
+      >
+        <View style={styles.mainContainer}>
+          <Image style={styles.appNameImage} source={Images.appName}></Image>
 
-        <View style={styles.profilePictureContainer}>
-          <Image
-            style={styles.profilePicture}
-            source={{
-              uri: "https://plus.unsplash.com/premium_photo-1689977871600-e755257fb5f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
-            }}
-          ></Image>
-          <View style={styles.addPicture}>
+          <View style={styles.profilePictureContainer}>
             <Image
-              style={styles.addPictureIcon}
-              source={Images.editIcon}
+              style={styles.profilePicture}
+              source={{
+                uri:
+                  image == null
+                    ? "https://plus.unsplash.com/premium_photo-1689977871600-e755257fb5f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
+                    : image,
+              }}
             ></Image>
+            <TouchableOpacity
+              onPress={() => {
+                setShowModel(true);
+              }}
+            >
+              <View style={styles.addPicture}>
+                <Image
+                  style={styles.addPictureIcon}
+                  source={Images.editIcon}
+                ></Image>
+              </View>
+            </TouchableOpacity>
           </View>
-        </View>
 
-        <Text style={styles.userName}>Nitin Kumar Bhatia</Text>
+          <Text style={styles.userName}>Nitin Kumar Bhatia</Text>
 
-        <Text style={styles.userPhoneNumber}>9876543210</Text>
+          <Text style={styles.userPhoneNumber}>9876543210</Text>
 
-        <TouchableOpacity
-          onPress={() => {
-            Actions.push(ScreenName.BookingScreen);
-          }}
-        >
+          <TouchableOpacity
+            onPress={() => {
+              Actions.push(ScreenName.BookingScreen);
+            }}
+          >
+            <View style={styles.itemMainContainer}>
+              <View style={styles.itemSubContainer}>
+                <Text style={styles.itemText}>Booking Detail</Text>
+                <Image
+                  style={styles.itemIcon}
+                  source={Images.eventIcon}
+                ></Image>
+              </View>
+            </View>
+          </TouchableOpacity>
+
           <View style={styles.itemMainContainer}>
             <View style={styles.itemSubContainer}>
-              <Text style={styles.itemText}>Booking Detail</Text>
-              <Image style={styles.itemIcon} source={Images.eventIcon}></Image>
+              <Text style={styles.itemText}>Construction Update</Text>
+              <Image style={styles.itemIcon} source={Images.homeIcon}></Image>
             </View>
           </View>
-        </TouchableOpacity>
 
-        <View style={styles.itemMainContainer}>
-          <View style={styles.itemSubContainer}>
-            <Text style={styles.itemText}>Construction Update</Text>
-            <Image style={styles.itemIcon} source={Images.homeIcon}></Image>
-          </View>
+          <TouchableOpacity
+            onPress={() => {
+              Actions.push(ScreenName.ContactUsScreen);
+            }}
+          >
+            <View style={styles.itemMainContainer}>
+              <View style={styles.itemSubContainer}>
+                <Text style={styles.itemText}>Get In Touch</Text>
+                <Image style={styles.itemIcon} source={Images.mailIcon}></Image>
+              </View>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              Actions.push(ScreenName.LoginScreen);
+            }}
+          >
+            <View style={styles.subContainer}>
+              <Text style={styles.logoutText}>Logout</Text>
+              <View style={styles.logoutButton}>
+                <Image
+                  style={styles.logoutIcon}
+                  source={Images.forwardIcon}
+                ></Image>
+              </View>
+            </View>
+          </TouchableOpacity>
+
+          <Image style={styles.topImage} source={Images.topBackgroung}></Image>
         </View>
 
-        <TouchableOpacity
-          onPress={() => {
-            Actions.push(ScreenName.ContactUsScreen);
-          }}
-        >
-          <View style={styles.itemMainContainer}>
-            <View style={styles.itemSubContainer}>
-              <Text style={styles.itemText}>Get In Touch</Text>
-              <Image style={styles.itemIcon} source={Images.mailIcon}></Image>
-            </View>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => {
-            Actions.push(ScreenName.LoginScreen);
-          }}
-        >
-          <View style={styles.subContainer}>
-            <Text style={styles.logoutText}>Logout</Text>
-            <View style={styles.logoutButton}>
-              <Image
-                style={styles.logoutIcon}
-                source={Images.forwardIcon}
-              ></Image>
-            </View>
-          </View>
-        </TouchableOpacity>
-
-        <Image style={styles.topImage} source={Images.topBackgroung}></Image>
-
-        {/* <ImagePickerModal
-          isVisible={visible}
-          onClose={() => setVisible(false)}
-          onImageLibraryPress={onImageLibraryPress}
-          onCameraPress={onCameraPress}
-        /> */}
-      </View>
-
-      <View style={styles.bottomContainer}>
-        <Image
-          style={styles.bottomImage}
-          source={Images.bottomBackgroung}
-        ></Image>
-        <View style={styles.bottomSubContainer}>
+        <View style={styles.bottomContainer}>
           <Image
-            style={styles.whatsAppIcon}
-            source={Images.whatsAppIcon}
+            style={styles.bottomImage}
+            source={Images.bottomBackgroung}
           ></Image>
-          <Image style={styles.phoneIcon} source={Images.phoneIcon}></Image>
+          <View style={styles.bottomSubContainer}>
+            <Image
+              style={styles.whatsAppIcon}
+              source={Images.whatsAppIcon}
+            ></Image>
+            <Image style={styles.phoneIcon} source={Images.phoneIcon}></Image>
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+      {showModel === true ? imagePickerOption() : null}
+    </>
   );
 }
 
@@ -271,31 +299,6 @@ const styles = StyleSheet.create({
     width: 15,
     alignSelf: "center",
   },
-  modal: {
-    height: "20%",
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-  },
-  buttons: {
-    paddingHorizontal: 20,
-    justifyContent: "space-between",
-    flexDirection: "row",
-  },
-  button: {
-    flexDirection: "column",
-  },
-  buttonIcon: {
-    height: "12%",
-    width: "12%",
-    tintColor: Colors.black,
-    alignSelf: "center",
-  },
-  buttonText: {
-    fontSize: 15,
-    fontWeight: "700",
-    color: Colors.black,
-    alignSelf: "center",
-  },
   bottomImage: {
     flex: 0.85,
     height: 215,
@@ -322,4 +325,36 @@ const styles = StyleSheet.create({
   },
   whatsAppIcon: { height: 35, width: 35, marginBottom: 15 },
   phoneIcon: { height: 35, width: 35 },
+  modelView: {
+    flex: 1,
+    alignSelf: "center",
+    justifyContent: "space-around",
+    flexDirection: "row",
+    height: Dimensions.get("window").height * 0.2,
+    width: Dimensions.get("window").width,
+    backgroundColor: Colors.lightOrange,
+    position: "absolute",
+    bottom: 0,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    paddingHorizontal: 20,
+  },
+  galleryAndCameraView: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignSelf: "center",
+  },
+  galleryAndCameraIcon: {
+    height: 40,
+    width: 40,
+    tintColor: Colors.arrowColor,
+    alignSelf: "center",
+    marginBottom: 5,
+  },
+  galleryAndCameraText: {
+    fontSize: 16,
+    fontFamily: Fonts.RobotoRegular,
+    color: Colors.arrowColor,
+    alignSelf: "center",
+  },
 });

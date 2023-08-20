@@ -16,6 +16,8 @@ const Images = {
   smallMailIcon: require("../icon/smallMailIcon.png"),
   darkPhoneIcon: require("../icon/darkPhoneIcon.png"),
   darkWhatsappIcon: require("../icon/darkWhatsappIcon.png"),
+  cameraIcon: require("../icon/camera.png"),
+  galleryIcon: require("../icon/gallery.png"),
 };
 
 export default Images;
