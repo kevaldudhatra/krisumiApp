@@ -160,7 +160,7 @@ export default function BookingScreen() {
 
         <View style={styles.subContainer}>
           <View style={styles.titleContainer}>
-            <Text style={styles.titleContainerText}>Waterfall Residences</Text>
+            <Text style={styles.titleContainerText}>Waterfall Suites</Text>
           </View>
 
           <View style={{ alignSelf: "center", flex: 1 }}>

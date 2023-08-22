@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Colors, Fonts, Images } from '../../Theme/Index';
-import { Actions } from 'react-native-router-flux';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import React, { useState } from "react";
+import { Colors, Fonts, Images } from "../../Theme/Index";
+import { Actions } from "react-native-router-flux";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
   StyleSheet,
   Text,
@@ -11,7 +11,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   TouchableOpacity,
-} from 'react-native';
+} from "react-native";
 
 export default function RaiseTicketScreen() {
   const [name, setName] = useState();
@@ -29,11 +29,13 @@ export default function RaiseTicketScreen() {
               <TouchableOpacity
                 onPress={() => {
                   Actions.pop();
-                }}>
+                }}
+              >
                 <View style={styles.backButton}>
                   <Image
                     style={styles.backIcon}
-                    source={Images.backwardIcon}></Image>
+                    source={Images.backwardIcon}
+                  ></Image>
                 </View>
               </TouchableOpacity>
               <Text style={styles.ticketHeaderText}>Raise A Ticket</Text>
@@ -43,7 +45,7 @@ export default function RaiseTicketScreen() {
             <Text style={styles.textInputHeaderText}>Registered Name</Text>
             <TextInput
               style={styles.textInput}
-              onChangeText={text => {
+              onChangeText={(text) => {
                 setName(text);
               }}
               value={name}
@@ -56,7 +58,7 @@ export default function RaiseTicketScreen() {
             <Text style={styles.textInputHeaderText}>Phone No</Text>
             <TextInput
               style={styles.textInput}
-              onChangeText={text => {
+              onChangeText={(text) => {
                 setPhoneNo(text);
               }}
               value={phoneNo}
@@ -69,7 +71,7 @@ export default function RaiseTicketScreen() {
             <Text style={styles.textInputHeaderText}>Email Address</Text>
             <TextInput
               style={styles.textInput}
-              onChangeText={text => {
+              onChangeText={(text) => {
                 setEmail(text);
               }}
               value={email}
@@ -82,7 +84,7 @@ export default function RaiseTicketScreen() {
             <Text style={styles.textInputHeaderText}>Customer ID</Text>
             <TextInput
               style={styles.textInput}
-              onChangeText={text => {
+              onChangeText={(text) => {
                 setCustId(text);
               }}
               value={custId}
@@ -95,7 +97,7 @@ export default function RaiseTicketScreen() {
             <Text style={styles.textInputHeaderText}>Query</Text>
             <View style={styles.queryInput}>
               <TextInput
-                onChangeText={text => {
+                onChangeText={(text) => {
                   setQuery(text);
                 }}
                 value={query}
@@ -107,7 +109,7 @@ export default function RaiseTicketScreen() {
               />
             </View>
 
-            <TouchableOpacity onPress={() => { }}>
+            <TouchableOpacity onPress={() => {}}>
               <View style={styles.ticketButton}>
                 <Text style={styles.ticketButtonText}>Generate A Ticket</Text>
               </View>
@@ -116,7 +118,8 @@ export default function RaiseTicketScreen() {
           <Image style={styles.topImage} source={Images.topBackgroung}></Image>
           <Image
             style={styles.bottomImage}
-            source={Images.bottomBackgroung}></Image>
+            source={Images.bottomBackgroung}
+          ></Image>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAwareScrollView>
@@ -126,15 +129,15 @@ export default function RaiseTicketScreen() {
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: Colors.white,
-    justifyContent: 'flex-start',
+    justifyContent: "flex-start",
     paddingTop: 30,
     paddingHorizontal: 20,
-    flexDirection: 'column',
+    flexDirection: "column",
   },
   ticketHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 30,
   },
   backButton: {
@@ -142,32 +145,32 @@ const styles = StyleSheet.create({
     width: 30,
     borderRadius: 15,
     backgroundColor: Colors.lightOrange,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   backIcon: {
     height: 15,
     width: 15,
-    alignSelf: 'center',
+    alignSelf: "center",
     tintColor: Colors.arrowColor,
   },
   ticketHeaderText: {
-    fontSize: 20,
+    fontSize: 19,
     fontFamily: Fonts.RobotoMedium,
     color: Colors.black,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   blankButton: {
     height: 30,
     width: 30,
     borderRadius: 15,
     backgroundColor: Colors.white,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   textInputHeaderText: {
     fontSize: 16,
     fontFamily: Fonts.RobotoMedium,
     color: Colors.black,
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     marginBottom: 10,
   },
   textInput: {
@@ -192,26 +195,26 @@ const styles = StyleSheet.create({
     borderRadius: 35,
     marginTop: 25,
     marginBottom: 5,
-    alignContent: 'center',
-    justifyContent: 'center',
+    alignContent: "center",
+    justifyContent: "center",
   },
   ticketButtonText: {
     fontSize: 18,
     fontFamily: Fonts.RobotoMedium,
     color: Colors.arrowColor,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   topImage: {
-    position: 'absolute',
+    position: "absolute",
     top: -25,
     right: 5,
     height: 130,
     width: 50,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   bottomImage: {
     height: 150,
-    width: '75%',
-    resizeMode: 'cover',
+    width: "75%",
+    resizeMode: "cover",
   },
 });

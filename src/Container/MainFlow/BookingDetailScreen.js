@@ -86,7 +86,7 @@ export default function BookingDetailScreen() {
         </View>
 
         {tabIndex != 2 && (
-          <Text style={styles.titleText}>Waterfall Residencess</Text>
+          <Text style={styles.titleText}>Waterfall Residences</Text>
         )}
 
         <Text style={styles.subTitleText}>Booking Code : WFR/TB/3F/UN502</Text>
@@ -108,7 +108,7 @@ export default function BookingDetailScreen() {
           <Text style={styles.reportDateText}></Text>
         ) : (
           <Text style={styles.reportDateText}>
-            Report Generated On - 23/10/2021
+            Report Generated On - Oct 14, 2021
           </Text>
         )}
 
