@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import { Colors, Fonts, Images } from "../../Theme/Index";
+import React, { useState, useEffect } from "react";
+import { Colors, Fonts, Images, Constant } from "../../Theme/Index";
 import { Actions } from "react-native-router-flux";
+import { getToken, getUnitSummaryDetails } from "../Action/actions";
+import Loader from "../../Component/Loader";
 import {
   StyleSheet,
   Text,
@@ -12,8 +14,10 @@ import {
   ScrollView,
 } from "react-native";
 
-export default function BookingDetailScreen() {
+export default function BookingDetailScreen(props) {
   const [tabIndex, setTabIndex] = useState(1);
+  const [unitDetails, setUnitDetails] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const tabData = [
     {
@@ -63,262 +67,315 @@ export default function BookingDetailScreen() {
     );
   };
 
+  async function getUnitDetailsAPI() {
+    setIsLoading(true);
+    const response = await getToken(
+      Constant.commonConstant.email,
+      Constant.commonConstant.password
+    );
+    if (
+      response &&
+      response.status === Constant.apiResponse.success &&
+      response.data.status == Constant.apiResponse.status
+    ) {
+      const newResponse = await getUnitSummaryDetails({
+        tokenId: response.data.tokenId,
+        bookingId: props.bookingId,
+      });
+      if (
+        newResponse &&
+        newResponse.status === Constant.apiResponse.success &&
+        newResponse.data[0].status == Constant.apiResponse.status
+      ) {
+        setIsLoading(false);
+        setUnitDetails(newResponse.data[0].message[0]);
+      } else {
+        setIsLoading(false);
+        setUnitDetails(null);
+      }
+    } else {
+      setIsLoading(false);
+      Constant.errorHandle(response);
+    }
+  }
+
+  useEffect(() => {
+    getUnitDetailsAPI();
+  }, []);
+
   return (
-    <ScrollView
-      contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.white }}
-    >
-      <View style={styles.mainContainer}>
-        <View style={styles.bookingHeader}>
-          <TouchableOpacity
-            onPress={() => {
-              Actions.pop();
-            }}
-          >
-            <View style={styles.backButton}>
+    <>
+      {isLoading == true ? (
+        <Loader isLoading={isLoading}></Loader>
+      ) : (
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.white }}
+        >
+          <View style={styles.mainContainer}>
+            <View style={styles.bookingHeader}>
+              <TouchableOpacity
+                onPress={() => {
+                  Actions.pop();
+                }}
+              >
+                <View style={styles.backButton}>
+                  <Image
+                    style={styles.backIcon}
+                    source={Images.backwardIcon}
+                  ></Image>
+                </View>
+              </TouchableOpacity>
+              <Text style={styles.bookingHeaderText}>Booking Detail</Text>
+              <View style={styles.blankButton}></View>
+            </View>
+
+            {tabIndex != 2 && (
+              <Text style={styles.titleText}>{unitDetails.project}</Text>
+            )}
+
+            <Text style={styles.subTitleText}>
+              {`Booking Code : ${unitDetails.customerCode}`}
+            </Text>
+
+            <View style={{ height: 70 }}>
+              <FlatList
+                paddingTop={15}
+                showsHorizontalScrollIndicator={false}
+                data={tabData}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.id}
+                horizontal={true}
+              />
+            </View>
+
+            <View style={{ height: 1, backgroundColor: Colors.black }}></View>
+
+            {tabIndex == 1 ? (
+              <Text style={styles.reportDateText}></Text>
+            ) : (
+              <Text style={styles.reportDateText}>
+                Report Generated On - Oct 14, 2021
+              </Text>
+            )}
+
+            <View>
+              {tabIndex == 1 ? (
+                <View style={styles.mainBoxContainer}>
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Booking Date</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText2}>23/10/2021</Text>
+                    </View>
+                  </View>
+                  <View style={styles.horizontalDivider}></View>
+
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Allotment Date</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText2}>10/11/2021</Text>
+                    </View>
+                  </View>
+                  <View style={styles.horizontalDivider}></View>
+
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Agreement Date</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText2}>23/10/2022</Text>
+                    </View>
+                  </View>
+                  <View style={styles.horizontalDivider}></View>
+
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Payment Plan</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text
+                        style={styles.boxText2}
+                      >{`Possession Link\nPlan (20:80)`}</Text>
+                    </View>
+                  </View>
+                </View>
+              ) : tabIndex == 2 ? (
+                <View style={styles.mainBoxContainer}>
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Project Type</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText2}>3LDK</Text>
+                    </View>
+                  </View>
+                  <View style={styles.horizontalDivider}></View>
+
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Unit Type</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText2}>
+                        {unitDetails.unitType}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.horizontalDivider}></View>
+
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Unit No</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText2}>
+                        {unitDetails.unitNumber}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.horizontalDivider}></View>
+
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Area sq.ft</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText2}>
+                        {unitDetails.areaSqFt}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              ) : tabIndex == 3 ? (
+                <View style={styles.mainBoxContainer}>
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Payment Mode</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText2}>Cash</Text>
+                    </View>
+                  </View>
+                  <View style={styles.horizontalDivider}></View>
+
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Pay Amount</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText2}>12 Lakh</Text>
+                    </View>
+                  </View>
+                  <View style={styles.horizontalDivider}></View>
+
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Pending Payment</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText2}>88 Lakh</Text>
+                    </View>
+                  </View>
+                  <View style={styles.horizontalDivider}></View>
+
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Payment Plan</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text
+                        style={styles.boxText2}
+                      >{`Possession Link\nPlan (20:80)`}</Text>
+                    </View>
+                  </View>
+                </View>
+              ) : (
+                <View style={styles.mainBoxContainer}>
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Booking Date</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText2}>23/10/2021</Text>
+                    </View>
+                  </View>
+                  <View style={styles.horizontalDivider}></View>
+
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Allotment Date</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText2}>10/11/2021</Text>
+                    </View>
+                  </View>
+                  <View style={styles.horizontalDivider}></View>
+
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Agreement Date</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText2}>23/10/2022</Text>
+                    </View>
+                  </View>
+                  <View style={styles.horizontalDivider}></View>
+
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Payment Plan</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text
+                        style={styles.boxText2}
+                      >{`Possession Link\nPlan (20:80)`}</Text>
+                    </View>
+                  </View>
+                </View>
+              )}
+            </View>
+
+            <Image
+              style={styles.topImage}
+              source={Images.topBackgroung}
+            ></Image>
+          </View>
+
+          <View style={styles.bottomContainer}>
+            <Image
+              style={styles.bottomImage}
+              source={Images.bottomBackgroung}
+            ></Image>
+            <View style={styles.bottomSubContainer}>
               <Image
-                style={styles.backIcon}
-                source={Images.backwardIcon}
+                style={styles.whatsAppIcon}
+                source={Images.whatsAppIcon}
               ></Image>
+              <Image style={styles.phoneIcon} source={Images.phoneIcon}></Image>
             </View>
-          </TouchableOpacity>
-          <Text style={styles.bookingHeaderText}>Booking Detail</Text>
-          <View style={styles.blankButton}></View>
-        </View>
-
-        {tabIndex != 2 && (
-          <Text style={styles.titleText}>Waterfall Residences</Text>
-        )}
-
-        <Text style={styles.subTitleText}>Booking Code : WFR/TB/3F/UN502</Text>
-
-        <View style={{ height: 70 }}>
-          <FlatList
-            paddingTop={15}
-            showsHorizontalScrollIndicator={false}
-            data={tabData}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            horizontal={true}
-          />
-        </View>
-
-        <View style={{ height: 1, backgroundColor: Colors.black }}></View>
-
-        {tabIndex == 1 ? (
-          <Text style={styles.reportDateText}></Text>
-        ) : (
-          <Text style={styles.reportDateText}>
-            Report Generated On - Oct 14, 2021
-          </Text>
-        )}
-
-        <View>
-          {tabIndex == 1 ? (
-            <View style={styles.mainBoxContainer}>
-              <View style={styles.mainBoxSection}>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText1}>Booking Date</Text>
-                </View>
-                <View style={styles.verticalDivider}></View>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText2}>23/10/2021</Text>
-                </View>
-              </View>
-              <View style={styles.horizontalDivider}></View>
-
-              <View style={styles.mainBoxSection}>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText1}>Allotment Date</Text>
-                </View>
-                <View style={styles.verticalDivider}></View>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText2}>10/11/2021</Text>
-                </View>
-              </View>
-              <View style={styles.horizontalDivider}></View>
-
-              <View style={styles.mainBoxSection}>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText1}>Agreement Date</Text>
-                </View>
-                <View style={styles.verticalDivider}></View>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText2}>23/10/2022</Text>
-                </View>
-              </View>
-              <View style={styles.horizontalDivider}></View>
-
-              <View style={styles.mainBoxSection}>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText1}>Payment Plan</Text>
-                </View>
-                <View style={styles.verticalDivider}></View>
-                <View style={styles.subBoxContainer}>
-                  <Text
-                    style={styles.boxText2}
-                  >{`Possession Link\nPlan (20:80)`}</Text>
-                </View>
-              </View>
-            </View>
-          ) : tabIndex == 2 ? (
-            <View style={styles.mainBoxContainer}>
-              <View style={styles.mainBoxSection}>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText1}>Project Type</Text>
-                </View>
-                <View style={styles.verticalDivider}></View>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText2}>3LDK</Text>
-                </View>
-              </View>
-              <View style={styles.horizontalDivider}></View>
-
-              <View style={styles.mainBoxSection}>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText1}>Unit Type</Text>
-                </View>
-                <View style={styles.verticalDivider}></View>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText2}>3 BHK</Text>
-                </View>
-              </View>
-              <View style={styles.horizontalDivider}></View>
-
-              <View style={styles.mainBoxSection}>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText1}>Unit No</Text>
-                </View>
-                <View style={styles.verticalDivider}></View>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText2}>UN502</Text>
-                </View>
-              </View>
-              <View style={styles.horizontalDivider}></View>
-
-              <View style={styles.mainBoxSection}>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText1}>Area sq.ft</Text>
-                </View>
-                <View style={styles.verticalDivider}></View>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText2}>1,800 sq.ft.</Text>
-                </View>
-              </View>
-            </View>
-          ) : tabIndex == 3 ? (
-            <View style={styles.mainBoxContainer}>
-              <View style={styles.mainBoxSection}>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText1}>Payment Mode</Text>
-                </View>
-                <View style={styles.verticalDivider}></View>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText2}>Cash</Text>
-                </View>
-              </View>
-              <View style={styles.horizontalDivider}></View>
-
-              <View style={styles.mainBoxSection}>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText1}>Pay Amount</Text>
-                </View>
-                <View style={styles.verticalDivider}></View>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText2}>12 Lakh</Text>
-                </View>
-              </View>
-              <View style={styles.horizontalDivider}></View>
-
-              <View style={styles.mainBoxSection}>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText1}>Pending Payment</Text>
-                </View>
-                <View style={styles.verticalDivider}></View>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText2}>88 Lakh</Text>
-                </View>
-              </View>
-              <View style={styles.horizontalDivider}></View>
-
-              <View style={styles.mainBoxSection}>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText1}>Payment Plan</Text>
-                </View>
-                <View style={styles.verticalDivider}></View>
-                <View style={styles.subBoxContainer}>
-                  <Text
-                    style={styles.boxText2}
-                  >{`Possession Link\nPlan (20:80)`}</Text>
-                </View>
-              </View>
-            </View>
-          ) : (
-            <View style={styles.mainBoxContainer}>
-              <View style={styles.mainBoxSection}>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText1}>Booking Date</Text>
-                </View>
-                <View style={styles.verticalDivider}></View>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText2}>23/10/2021</Text>
-                </View>
-              </View>
-              <View style={styles.horizontalDivider}></View>
-
-              <View style={styles.mainBoxSection}>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText1}>Allotment Date</Text>
-                </View>
-                <View style={styles.verticalDivider}></View>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText2}>10/11/2021</Text>
-                </View>
-              </View>
-              <View style={styles.horizontalDivider}></View>
-
-              <View style={styles.mainBoxSection}>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText1}>Agreement Date</Text>
-                </View>
-                <View style={styles.verticalDivider}></View>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText2}>23/10/2022</Text>
-                </View>
-              </View>
-              <View style={styles.horizontalDivider}></View>
-
-              <View style={styles.mainBoxSection}>
-                <View style={styles.subBoxContainer}>
-                  <Text style={styles.boxText1}>Payment Plan</Text>
-                </View>
-                <View style={styles.verticalDivider}></View>
-                <View style={styles.subBoxContainer}>
-                  <Text
-                    style={styles.boxText2}
-                  >{`Possession Link\nPlan (20:80)`}</Text>
-                </View>
-              </View>
-            </View>
-          )}
-        </View>
-
-        <Image style={styles.topImage} source={Images.topBackgroung}></Image>
-      </View>
-
-      <View style={styles.bottomContainer}>
-        <Image
-          style={styles.bottomImage}
-          source={Images.bottomBackgroung}
-        ></Image>
-        <View style={styles.bottomSubContainer}>
-          <Image
-            style={styles.whatsAppIcon}
-            source={Images.whatsAppIcon}
-          ></Image>
-          <Image style={styles.phoneIcon} source={Images.phoneIcon}></Image>
-        </View>
-      </View>
-    </ScrollView>
+          </View>
+        </ScrollView>
+      )}
+    </>
   );
 }
 

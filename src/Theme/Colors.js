@@ -1,4 +1,7 @@
-const Colors = {
+export default {
+  shadowColor: "#89878780",
+  borderLine: "#ffffff21",
+  lineTopBottom: "#EDEDED",
   white: "#ffffff",
   black: "#000000",
   lightOrange: "#FFEABE",
@@ -9,5 +12,3 @@ const Colors = {
   inactiveDotColor: "#DEDEDE",
   activeDotColor: "#A8894F",
 };
-
-export default Colors;

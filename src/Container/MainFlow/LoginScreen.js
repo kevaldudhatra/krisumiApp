@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Colors, Fonts, Images, ScreenName } from "../../Theme/Index";
+import { Colors, Fonts, Images, ScreenName, Constant } from "../../Theme/Index";
 import { Actions } from "react-native-router-flux";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import Loader from "../../Component/Loader";
+import { getToken } from "../Action/actions";
 import {
   StyleSheet,
   Text,
@@ -16,13 +17,31 @@ import {
 } from "react-native";
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("Krisumi@In4");
+  const [password, setPassword] = useState("Kr2is0um1i9!");
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function getTokenAPI() {
+    setIsLoading(true);
+    const response = await getToken(email, password);
+    if (
+      response &&
+      response.status === Constant.apiResponse.success &&
+      response.data.status === Constant.apiResponse.status
+    ) {
+      setIsLoading(false);
+      Actions.push(ScreenName.HomeScreen);
+    } else {
+      setIsLoading(false);
+      Constant.errorHandle(response);
+    }
+  }
 
   return (
     <ScrollView
       contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.white }}
     >
+      <Loader isLoading={isLoading}></Loader>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.mainContainer}>
           <View style={styles.loginHeader}>
@@ -68,7 +87,7 @@ export default function LoginScreen() {
           />
           <TouchableOpacity
             onPress={() => {
-              Actions.push(ScreenName.HomeScreen);
+              getTokenAPI();
             }}
           >
             <View style={styles.loginButton}>

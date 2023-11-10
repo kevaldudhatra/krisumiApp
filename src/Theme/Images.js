@@ -1,4 +1,4 @@
-const Images = {
+export default {
   appName: require("../icon/appName.png"),
   forwardIcon: require("../icon/forwardIcon.png"),
   backwardIcon: require("../icon/backwardIcon.png"),
@@ -19,5 +19,3 @@ const Images = {
   cameraIcon: require("../icon/camera.png"),
   galleryIcon: require("../icon/gallery.png"),
 };
-
-export default Images;

@@ -1,7 +1,9 @@
-import React, { useState } from "react";
-import { Colors, Fonts, Images, ScreenName } from "../../Theme/Index";
+import React, { useEffect, useState } from "react";
+import { Colors, Fonts, Images, ScreenName, Constant } from "../../Theme/Index";
 import { Actions } from "react-native-router-flux";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+import { getToken, getCustomerDetails } from "../Action/actions";
+import Loader from "../../Component/Loader";
 import {
   Image,
   StyleSheet,
@@ -13,8 +15,47 @@ import {
 } from "react-native";
 
 export default function HomeScreen() {
+  const [name, setName] = useState(null);
+  const [number, setNumber] = useState(null);
   const [showModel, setShowModel] = useState(false);
   const [image, setImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function getUserDetailsAPI() {
+    setIsLoading(true);
+    const response = await getToken(
+      Constant.commonConstant.email,
+      Constant.commonConstant.password
+    );
+    if (
+      response &&
+      response.status === Constant.apiResponse.success &&
+      response.data.status == Constant.apiResponse.status
+    ) {
+      const newResponse = await getCustomerDetails({
+        tokenId: response.data.tokenId,
+        phoneNumber: Constant.commonConstant.mobileNumber,
+      });
+      if (
+        newResponse &&
+        newResponse.status === Constant.apiResponse.success &&
+        newResponse.data[0].status == Constant.apiResponse.status
+      ) {
+        setIsLoading(false);
+        setName(newResponse.data[0].message[0].customerName);
+        setNumber(newResponse.data[0].message[0].phoneNumber);
+      } else {
+        setIsLoading(false);
+        setName(null);
+        setNumber(null);
+      }
+    } else {
+      setIsLoading(false);
+      setName(null);
+      setNumber(null);
+      Constant.errorHandle(response);
+    }
+  }
 
   function imagePickerOption() {
     return (
@@ -84,111 +125,129 @@ export default function HomeScreen() {
     }
   }
 
+  useEffect(() => {
+    getUserDetailsAPI();
+  }, []);
+
   return (
     <>
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.white }}
-      >
-        <View style={styles.mainContainer}>
-          <Image style={styles.appNameImage} source={Images.appName}></Image>
+      {isLoading == true ? (
+        <Loader isLoading={isLoading}></Loader>
+      ) : (
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.white }}
+        >
+          <View style={styles.mainContainer}>
+            <Image style={styles.appNameImage} source={Images.appName}></Image>
 
-          <View style={styles.profilePictureContainer}>
-            <Image
-              style={styles.profilePicture}
-              source={{
-                uri:
-                  image == null
-                    ? "https://plus.unsplash.com/premium_photo-1689977871600-e755257fb5f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
-                    : image,
-              }}
-            ></Image>
+            <View style={styles.profilePictureContainer}>
+              <Image
+                style={styles.profilePicture}
+                source={{
+                  uri:
+                    image == null
+                      ? "https://plus.unsplash.com/premium_photo-1689977871600-e755257fb5f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
+                      : image,
+                }}
+              ></Image>
+              <TouchableOpacity
+                onPress={() => {
+                  setShowModel(true);
+                }}
+              >
+                <View style={styles.addPicture}>
+                  <Image
+                    style={styles.addPictureIcon}
+                    source={Images.editIcon}
+                  ></Image>
+                </View>
+              </TouchableOpacity>
+            </View>
+
+            <Text style={styles.userName}>
+              {name === null ? "Nitin Kumar Bhatia" : name}
+            </Text>
+
+            <Text style={styles.userPhoneNumber}>
+              {number === null ? "9876543210" : number}
+            </Text>
+
             <TouchableOpacity
               onPress={() => {
-                setShowModel(true);
+                Actions.push(ScreenName.BookingScreen);
               }}
             >
-              <View style={styles.addPicture}>
-                <Image
-                  style={styles.addPictureIcon}
-                  source={Images.editIcon}
-                ></Image>
+              <View style={styles.itemMainContainer}>
+                <View style={styles.itemSubContainer}>
+                  <Text style={styles.itemText}>Booking Detail</Text>
+                  <Image
+                    style={styles.itemIcon}
+                    source={Images.eventIcon}
+                  ></Image>
+                </View>
               </View>
             </TouchableOpacity>
-          </View>
 
-          <Text style={styles.userName}>Nitin Kumar Bhatia</Text>
-
-          <Text style={styles.userPhoneNumber}>9876543210</Text>
-
-          <TouchableOpacity
-            onPress={() => {
-              Actions.push(ScreenName.BookingScreen);
-            }}
-          >
             <View style={styles.itemMainContainer}>
               <View style={styles.itemSubContainer}>
-                <Text style={styles.itemText}>Booking Detail</Text>
-                <Image
-                  style={styles.itemIcon}
-                  source={Images.eventIcon}
-                ></Image>
+                <Text style={styles.itemText}>Construction Update</Text>
+                <Image style={styles.itemIcon} source={Images.homeIcon}></Image>
               </View>
             </View>
-          </TouchableOpacity>
 
-          <View style={styles.itemMainContainer}>
-            <View style={styles.itemSubContainer}>
-              <Text style={styles.itemText}>Construction Update</Text>
-              <Image style={styles.itemIcon} source={Images.homeIcon}></Image>
-            </View>
-          </View>
-
-          <TouchableOpacity
-            onPress={() => {
-              Actions.push(ScreenName.ContactUsScreen);
-            }}
-          >
-            <View style={styles.itemMainContainer}>
-              <View style={styles.itemSubContainer}>
-                <Text style={styles.itemText}>Get In Touch</Text>
-                <Image style={styles.itemIcon} source={Images.mailIcon}></Image>
+            <TouchableOpacity
+              onPress={() => {
+                Actions.push(ScreenName.ContactUsScreen);
+              }}
+            >
+              <View style={styles.itemMainContainer}>
+                <View style={styles.itemSubContainer}>
+                  <Text style={styles.itemText}>Get In Touch</Text>
+                  <Image
+                    style={styles.itemIcon}
+                    source={Images.mailIcon}
+                  ></Image>
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => {
-              Actions.push(ScreenName.LoginScreen);
-            }}
-          >
-            <View style={styles.subContainer}>
-              <Text style={styles.logoutText}>Logout</Text>
-              <View style={styles.logoutButton}>
-                <Image
-                  style={styles.logoutIcon}
-                  source={Images.forwardIcon}
-                ></Image>
+            <TouchableOpacity
+              onPress={() => {
+                Actions.push(ScreenName.LoginScreen);
+              }}
+            >
+              <View style={styles.subContainer}>
+                <Text style={styles.logoutText}>Logout</Text>
+                <View style={styles.logoutButton}>
+                  <Image
+                    style={styles.logoutIcon}
+                    source={Images.forwardIcon}
+                  ></Image>
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
+            </TouchableOpacity>
 
-          <Image style={styles.topImage} source={Images.topBackgroung}></Image>
-        </View>
-
-        <View style={styles.bottomContainer}>
-          <Image
-            style={styles.bottomImage}
-            source={Images.bottomBackgroung}
-          ></Image>
-          <View style={styles.bottomSubContainer}>
             <Image
-              style={styles.whatsAppIcon}
-              source={Images.whatsAppIcon}
+              style={styles.topImage}
+              source={Images.topBackgroung}
             ></Image>
-            <Image style={styles.phoneIcon} source={Images.phoneIcon}></Image>
           </View>
-        </View>
-      </ScrollView>
+
+          <View style={styles.bottomContainer}>
+            <Image
+              style={styles.bottomImage}
+              source={Images.bottomBackgroung}
+            ></Image>
+            <View style={styles.bottomSubContainer}>
+              <Image
+                style={styles.whatsAppIcon}
+                source={Images.whatsAppIcon}
+              ></Image>
+              <Image style={styles.phoneIcon} source={Images.phoneIcon}></Image>
+            </View>
+          </View>
+        </ScrollView>
+      )}
       {showModel === true ? imagePickerOption() : null}
     </>
   );

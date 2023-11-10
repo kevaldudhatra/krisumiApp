@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
+import { BackHandler } from "react-native";
 import { Router, Scene, Stack, Actions } from "react-native-router-flux";
 import { Colors, ScreenName } from "../Theme/Index";
-import { BackHandler } from "react-native";
 
 // screen list
 import SplashScreen from "../Container/MainFlow/SplashScreen";

@@ -1,4 +1,4 @@
-const ScreenName = {
+export default {
   SplashScreen: "SplashScreen",
   LoginScreen: "LoginScreen",
   RaiseTicketScreen: "RaiseTicketScreen",
@@ -7,5 +7,3 @@ const ScreenName = {
   BookingScreen: "BookingScreen",
   BookingDetailScreen: "BookingDetailScreen",
 };
-
-export default ScreenName;
