@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { Colors, Fonts, Images } from "../../Theme/Index";
+import { Colors, Fonts, Images, Constant } from "../../Theme/Index";
 import { Actions } from "react-native-router-flux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { raiseTicketRequest } from "../Action/actions";
+import { showAlert } from "../../Functions/Alerts";
+import Loader from "../../Component/Loader";
 import {
   StyleSheet,
   Text,
@@ -14,16 +17,51 @@ import {
 } from "react-native";
 
 export default function RaiseTicketScreen() {
-  const [name, setName] = useState();
-  const [phoneNo, setPhoneNo] = useState();
-  const [email, setEmail] = useState();
-  const [custId, setCustId] = useState();
-  const [query, setQuery] = useState();
+  const [name, setName] = useState("");
+  const [phoneNo, setPhoneNo] = useState("");
+  const [email, setEmail] = useState("");
+  const [custId, setCustId] = useState("");
+  const [query, setQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function raiseTicketAPI() {
+    setIsLoading(true);
+    const response = await raiseTicketRequest({
+      user_email: email,
+      user_name: name,
+      user_phone: phoneNo,
+      customer_id: custId,
+      query: query,
+    });
+    if (
+      response &&
+      response.status === Constant.apiResponse.success &&
+      response.data.status == true
+    ) {
+      setIsLoading(false);
+      setName("");
+      setPhoneNo("");
+      setEmail("");
+      setCustId("");
+      setQuery("");
+      showAlert(response.data.message);
+    } else {
+      setIsLoading(false);
+      setName("");
+      setPhoneNo("");
+      setEmail("");
+      setCustId("");
+      setQuery("");
+      Constant.errorHandle(response);
+    }
+  }
 
   return (
     <KeyboardAwareScrollView style={{ flex: 1, backgroundColor: Colors.white }}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View>
+          <Loader isLoading={isLoading}></Loader>
+
           <View style={styles.mainContainer}>
             <View style={styles.ticketHeader}>
               <TouchableOpacity
@@ -65,7 +103,7 @@ export default function RaiseTicketScreen() {
               placeholderTextColor={Colors.borderColor}
               placeholderStyle={{ fontFamily: Fonts.DMSansRegular }}
               placeholder="+91"
-              keyboardType="name-phone-pad"
+              keyboardType="numeric"
             />
 
             <Text style={styles.textInputHeaderText}>Email Address</Text>
@@ -109,13 +147,29 @@ export default function RaiseTicketScreen() {
               />
             </View>
 
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity
+              onPress={() => {
+                if (
+                  name == "" ||
+                  phoneNo == "" ||
+                  email == "" ||
+                  custId == "" ||
+                  query == ""
+                ) {
+                  showAlert("Oops!\nRequired fields are missing.");
+                } else {
+                  raiseTicketAPI();
+                }
+              }}
+            >
               <View style={styles.ticketButton}>
                 <Text style={styles.ticketButtonText}>Generate A Ticket</Text>
               </View>
             </TouchableOpacity>
           </View>
+
           <Image style={styles.topImage} source={Images.topBackgroung}></Image>
+
           <Image
             style={styles.bottomImage}
             source={Images.bottomBackgroung}

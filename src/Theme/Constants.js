@@ -10,6 +10,8 @@ export const API = {
   getBasicCustomerDetails: baseURL.URL + "/GetBasicCustomerDetails",
   getBookingDetails: baseURL.URL + "/GetBookingDetails",
   getUnitSummaryDetails: baseURL.URL + "/GetUnitSummaryDetails",
+  addContactUsRequest: "https://krisumi.virvainfotech.com/api/v1/add/enquiry",
+  raiseTicketRequest: "https://krisumi.virvainfotech.com/api/v1/add/ticket",
 };
 
 export const commonConstant = {

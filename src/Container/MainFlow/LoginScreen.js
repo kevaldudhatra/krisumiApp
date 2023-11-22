@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { BackHandler } from "react-native";
 import { Colors, Fonts, Images, ScreenName, Constant } from "../../Theme/Index";
 import { Actions } from "react-native-router-flux";
 import Loader from "../../Component/Loader";
@@ -47,7 +48,7 @@ export default function LoginScreen() {
           <View style={styles.loginHeader}>
             <TouchableOpacity
               onPress={() => {
-                Actions.pop();
+                BackHandler.exitApp();
               }}
             >
               <View style={styles.backButton}>

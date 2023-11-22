@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { Colors, Fonts, Images } from "../../Theme/Index";
+import { Colors, Fonts, Images, Constant } from "../../Theme/Index";
 import { Actions } from "react-native-router-flux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { addContactUsRequest } from "../Action/actions";
+import { showAlert } from "../../Functions/Alerts";
+import Loader from "../../Component/Loader";
 import {
   StyleSheet,
   Text,
@@ -14,15 +17,47 @@ import {
 } from "react-native";
 
 export default function ContactUsScreen() {
-  const [name, setName] = useState();
-  const [phoneNo, setPhoneNo] = useState();
-  const [email, setEmail] = useState();
-  const [yourMessage, setYourMessage] = useState();
+  const [name, setName] = useState("");
+  const [phoneNo, setPhoneNo] = useState("");
+  const [email, setEmail] = useState("");
+  const [yourMessage, setYourMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function contactUsAPI() {
+    setIsLoading(true);
+    const response = await addContactUsRequest({
+      user_email: email,
+      user_name: name,
+      user_phone: phoneNo,
+      user_message: yourMessage,
+    });
+    if (
+      response &&
+      response.status === Constant.apiResponse.success &&
+      response.data.status == true
+    ) {
+      setIsLoading(false);
+      setName("");
+      setPhoneNo("");
+      setEmail("");
+      setYourMessage("");
+      showAlert(response.data.message);
+    } else {
+      setIsLoading(false);
+      setName("");
+      setPhoneNo("");
+      setEmail("");
+      setYourMessage("");
+      Constant.errorHandle(response);
+    }
+  }
 
   return (
     <KeyboardAwareScrollView style={{ flex: 1, backgroundColor: Colors.white }}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View>
+          <Loader isLoading={isLoading}></Loader>
+
           <View style={styles.mainContainer}>
             <View style={styles.contactHeader}>
               <TouchableOpacity
@@ -105,7 +140,7 @@ export default function ContactUsScreen() {
               placeholderTextColor={Colors.borderColor}
               placeholderStyle={{ fontFamily: Fonts.DMSansRegular }}
               placeholder="+91"
-              keyboardType="name-phone-pad"
+              keyboardType="numeric"
             />
 
             <Text style={styles.textInputHeaderText}>Email Address</Text>
@@ -136,7 +171,20 @@ export default function ContactUsScreen() {
               />
             </View>
 
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity
+              onPress={() => {
+                if (
+                  name == "" ||
+                  phoneNo == "" ||
+                  email == "" ||
+                  yourMessage == ""
+                ) {
+                  showAlert("Oops!\nRequired fields are missing.");
+                } else {
+                  contactUsAPI();
+                }
+              }}
+            >
               <View style={styles.contactButton}>
                 <Text style={styles.contactButtonText}>Generate A Ticket</Text>
               </View>

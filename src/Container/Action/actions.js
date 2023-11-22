@@ -66,3 +66,39 @@ export function getUnitSummaryDetails(param) {
       return error.response;
     });
 }
+
+export function addContactUsRequest(param) {
+  return Axios.post(Constants.API.addContactUsRequest, param)
+    .then(function (response) {
+      console.log(
+        "addContactUsRequest api call success => ",
+        JSON.stringify(response)
+      );
+      return response;
+    })
+    .catch(function (error) {
+      console.log(
+        "addContactUsRequest api call fail => ",
+        JSON.stringify(error.response)
+      );
+      return error.response;
+    });
+}
+
+export function raiseTicketRequest(param) {
+  return Axios.post(Constants.API.raiseTicketRequest, param)
+    .then(function (response) {
+      console.log(
+        "raiseTicketRequest api call success => ",
+        JSON.stringify(response)
+      );
+      return response;
+    })
+    .catch(function (error) {
+      console.log(
+        "raiseTicketRequest api call fail => ",
+        JSON.stringify(error.response)
+      );
+      return error.response;
+    });
+}
