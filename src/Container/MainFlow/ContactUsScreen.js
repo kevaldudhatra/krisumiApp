@@ -159,6 +159,7 @@ export default function ContactUsScreen() {
             <Text style={styles.textInputHeaderText}>Your Message</Text>
             <View style={styles.yourMessageInput}>
               <TextInput
+                style={{ color: Colors.black }}
                 onChangeText={(text) => {
                   setYourMessage(text);
                 }}
@@ -343,6 +344,7 @@ const styles = StyleSheet.create({
     borderRadius: 35,
     paddingHorizontal: 30,
     marginBottom: 20,
+    color: Colors.black,
     borderColor: Colors.borderColor,
   },
   yourMessageInput: {

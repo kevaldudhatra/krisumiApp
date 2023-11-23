@@ -190,6 +190,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 35,
     paddingHorizontal: 30,
+    color: Colors.black,
     borderColor: Colors.borderColor,
   },
   passwordText: {

@@ -135,6 +135,7 @@ export default function RaiseTicketScreen() {
             <Text style={styles.textInputHeaderText}>Query</Text>
             <View style={styles.queryInput}>
               <TextInput
+                style={{ color: Colors.black }}
                 onChangeText={(text) => {
                   setQuery(text);
                 }}
@@ -233,6 +234,7 @@ const styles = StyleSheet.create({
     borderRadius: 35,
     paddingHorizontal: 30,
     marginBottom: 20,
+    color: Colors.white,
     borderColor: Colors.borderColor,
   },
   queryInput: {
