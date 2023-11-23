@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     borderRadius: 35,
     paddingHorizontal: 30,
     marginBottom: 20,
-    color: Colors.white,
+    color: Colors.black,
     borderColor: Colors.borderColor,
   },
   queryInput: {
