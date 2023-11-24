@@ -1,5 +1,6 @@
 export default {
   appName: require("../icon/appName.png"),
+  appLogo: require("../icon/appLogo.png"),
   forwardIcon: require("../icon/forwardIcon.png"),
   backwardIcon: require("../icon/backwardIcon.png"),
   splashTopBackground: require("../icon/splashTopBackground.png"),

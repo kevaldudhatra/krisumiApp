@@ -4,6 +4,7 @@ import { Colors, Fonts, Images, ScreenName, Constant } from "../../Theme/Index";
 import { Actions } from "react-native-router-flux";
 import Loader from "../../Component/Loader";
 import { getToken } from "../Action/actions";
+import { showAlert } from "../../Functions/Alerts";
 import {
   StyleSheet,
   Text,
@@ -18,8 +19,8 @@ import {
 } from "react-native";
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState("Krisumi@In4");
-  const [password, setPassword] = useState("Kr2is0um1i9!");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   async function getTokenAPI() {
@@ -88,7 +89,11 @@ export default function LoginScreen() {
           />
           <TouchableOpacity
             onPress={() => {
-              getTokenAPI();
+              if (email == "" || password == "") {
+                showAlert("Oops!\nRequired fields are missing.");
+              } else {
+                getTokenAPI();
+              }
             }}
           >
             <View style={styles.loginButton}>
