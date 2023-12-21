@@ -35,6 +35,7 @@ export default function HomeScreen() {
       const newResponse = await getCustomerDetails({
         tokenId: response.data.tokenId,
         phoneNumber: Constant.commonConstant.mobileNumber,
+        emailId: Constant.commonConstant.emailId,
       });
       if (
         newResponse &&

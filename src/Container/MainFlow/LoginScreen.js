@@ -3,7 +3,7 @@ import { BackHandler } from "react-native";
 import { Colors, Fonts, Images, ScreenName, Constant } from "../../Theme/Index";
 import { Actions } from "react-native-router-flux";
 import Loader from "../../Component/Loader";
-import { getToken } from "../Action/actions";
+import { getToken, getCustomerDetails } from "../Action/actions";
 import { showAlert } from "../../Functions/Alerts";
 import {
   StyleSheet,
@@ -25,14 +25,38 @@ export default function LoginScreen() {
 
   async function getTokenAPI() {
     setIsLoading(true);
-    const response = await getToken(email, password);
+    const response = await getToken(
+      Constant.commonConstant.email,
+      Constant.commonConstant.password
+    );
     if (
       response &&
       response.status === Constant.apiResponse.success &&
-      response.data.status === Constant.apiResponse.status
+      response.data.status == Constant.apiResponse.status
     ) {
-      setIsLoading(false);
-      Actions.push(ScreenName.HomeScreen);
+      const newResponse = await getCustomerDetails({
+        tokenId: response.data.tokenId,
+        phoneNumber: Constant.commonConstant.mobileNumber,
+        emailId: Constant.commonConstant.emailId,
+      });
+      if (
+        newResponse &&
+        newResponse.status === Constant.apiResponse.success &&
+        newResponse.data[0].status == Constant.apiResponse.status
+      ) {
+        setIsLoading(false);
+        if (
+          newResponse.data[0].message[0].emailId == email &&
+          newResponse.data[0].message[0].phoneNumber == "+91" + password
+        ) {
+          Actions.push(ScreenName.HomeScreen);
+        } else {
+          showAlert("Oops!\nInvalid Credentials.");
+        }
+      } else {
+        setIsLoading(false);
+        Constant.errorHandle(newResponse);
+      }
     } else {
       setIsLoading(false);
       Constant.errorHandle(response);
@@ -85,7 +109,7 @@ export default function LoginScreen() {
             placeholderTextColor={Colors.borderColor}
             placeholderStyle={{ fontFamily: Fonts.DMSansRegular }}
             placeholder="Enter Your Password"
-            keyboardType="default"
+            keyboardType="numeric"
           />
           <TouchableOpacity
             onPress={() => {

@@ -19,6 +19,7 @@ export const commonConstant = {
   email: "Krisumi@In4",
   password: "Kr2is0um1i9!",
   mobileNumber: "+919711217991",
+  emailId: "piyush@global-achievers.com",
   emitter: new EventEmitter(),
 };
 
