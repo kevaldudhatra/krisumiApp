@@ -36,8 +36,8 @@ export default function LoginScreen() {
     ) {
       const newResponse = await getCustomerDetails({
         tokenId: response.data.tokenId,
-        phoneNumber: Constant.commonConstant.mobileNumber,
-        emailId: Constant.commonConstant.emailId,
+        phoneNumber: "+91" + password,
+        emailId: email,
       });
       if (
         newResponse &&
@@ -45,11 +45,17 @@ export default function LoginScreen() {
         newResponse.data[0].status == Constant.apiResponse.status
       ) {
         setIsLoading(false);
-        if (
-          newResponse.data[0].message[0].emailId == email &&
-          newResponse.data[0].message[0].phoneNumber == "+91" + password
-        ) {
-          Actions.push(ScreenName.HomeScreen);
+        if (newResponse.data[0].message.length > 0) {
+          if (
+            newResponse.data[0].message[0].emailId == email &&
+            newResponse.data[0].message[0].phoneNumber == "+91" + password
+          ) {
+            Constant.commonConstant.currentUseremail = email;
+            Constant.commonConstant.currentUserPassword = "+91" + password;
+            Actions.push(ScreenName.HomeScreen);
+          } else {
+            showAlert("Oops!\nInvalid Credentials.");
+          }
         } else {
           showAlert("Oops!\nInvalid Credentials.");
         }

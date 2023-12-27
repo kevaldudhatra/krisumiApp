@@ -18,8 +18,8 @@ export const commonConstant = {
   appName: "Krisumi",
   email: "Krisumi@In4",
   password: "Kr2is0um1i9!",
-  mobileNumber: "+919711217991",
-  emailId: "piyush@global-achievers.com",
+  currentUseremail: null,
+  currentUserPassword: null,
   emitter: new EventEmitter(),
 };
 

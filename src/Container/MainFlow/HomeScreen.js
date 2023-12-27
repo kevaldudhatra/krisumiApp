@@ -34,8 +34,8 @@ export default function HomeScreen() {
     ) {
       const newResponse = await getCustomerDetails({
         tokenId: response.data.tokenId,
-        phoneNumber: Constant.commonConstant.mobileNumber,
-        emailId: Constant.commonConstant.emailId,
+        phoneNumber: Constant.commonConstant.currentUserPassword,
+        emailId: Constant.commonConstant.currentUseremail,
       });
       if (
         newResponse &&
@@ -209,6 +209,8 @@ export default function HomeScreen() {
 
             <TouchableOpacity
               onPress={() => {
+                Constant.commonConstant.currentUserPassword = null;
+                Constant.commonConstant.currentUseremail = null;
                 Actions.push(ScreenName.LoginScreen);
               }}
             >
