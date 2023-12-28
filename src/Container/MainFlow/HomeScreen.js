@@ -4,6 +4,7 @@ import { Actions } from "react-native-router-flux";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import { getToken, getCustomerDetails } from "../Action/actions";
 import Loader from "../../Component/Loader";
+import { showAlert } from "../../Functions/Alerts";
 import {
   Image,
   StyleSheet,
@@ -12,11 +13,13 @@ import {
   Dimensions,
   TouchableOpacity,
   ScrollView,
+  Linking,
 } from "react-native";
 
 export default function HomeScreen() {
   const [name, setName] = useState(null);
   const [number, setNumber] = useState(null);
+  const [project, setProject] = useState(null);
   const [showModel, setShowModel] = useState(false);
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -45,15 +48,18 @@ export default function HomeScreen() {
         setIsLoading(false);
         setName(newResponse.data[0].message[0].customerName);
         setNumber(newResponse.data[0].message[0].phoneNumber);
+        setProject(newResponse.data[0].message[0].project);
       } else {
         setIsLoading(false);
         setName(null);
         setNumber(null);
+        setProject(null);
       }
     } else {
       setIsLoading(false);
       setName(null);
       setNumber(null);
+      setProject(null);
       Constant.errorHandle(response);
     }
   }
@@ -184,12 +190,33 @@ export default function HomeScreen() {
               </View>
             </TouchableOpacity>
 
-            <View style={styles.itemMainContainer}>
-              <View style={styles.itemSubContainer}>
-                <Text style={styles.itemText}>Construction Update</Text>
-                <Image style={styles.itemIcon} source={Images.homeIcon}></Image>
+            <TouchableOpacity
+              onPress={() => {
+                if (project == "Waterfall Residences") {
+                  Linking.openURL(
+                    "https://krisumi.com/project/waterfall-residences/#construct"
+                  ).catch(() => {
+                    showAlert("Oops!\nCan't open this URL.");
+                  });
+                } else if (project == "Waterfall Suites") {
+                  Linking.openURL(
+                    "https://krisumi.com/project/waterfall-suites/#construct"
+                  ).catch(() => {
+                    showAlert("Oops!\nCan't open this URL.");
+                  });
+                }
+              }}
+            >
+              <View style={styles.itemMainContainer}>
+                <View style={styles.itemSubContainer}>
+                  <Text style={styles.itemText}>Construction Update</Text>
+                  <Image
+                    style={styles.itemIcon}
+                    source={Images.homeIcon}
+                  ></Image>
+                </View>
               </View>
-            </View>
+            </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => {
