@@ -49,17 +49,25 @@ export default function HomeScreen() {
         setName(newResponse.data[0].message[0].customerName);
         setNumber(newResponse.data[0].message[0].phoneNumber);
         setProject(newResponse.data[0].message[0].project);
+        Constant.commonConstant.currentUserBookingId =
+          newResponse.data[0].message[0].bookingId;
+        Constant.commonConstant.currentUserCustomerCode =
+          newResponse.data[0].message[0].customerCode;
       } else {
         setIsLoading(false);
         setName(null);
         setNumber(null);
         setProject(null);
+        Constant.commonConstant.currentUserBookingId = null;
+        Constant.commonConstant.currentUserCustomerCode = null;
       }
     } else {
       setIsLoading(false);
       setName(null);
       setNumber(null);
       setProject(null);
+      Constant.commonConstant.currentUserBookingId = null;
+      Constant.commonConstant.currentUserCustomerCode = null;
       Constant.errorHandle(response);
     }
   }

@@ -108,7 +108,7 @@ export default function BookingScreen() {
           <View style={styles.boxContainer}>
             <View style={styles.boxSubContainer}>
               <Text style={styles.boxTitleText}>Project Type</Text>
-              <Text style={styles.boxSubTitleText}>3 LDK</Text>
+              <Text style={styles.boxSubTitleText}>{item.item.project}</Text>
             </View>
             <View style={styles.verticalDivider}></View>
             <View style={styles.boxSubContainer}>
@@ -125,7 +125,10 @@ export default function BookingScreen() {
           <TouchableOpacity
             onPress={() => {
               Actions.push(ScreenName.BookingDetailScreen, {
-                bookingId: item.item.bookingId,
+                bookingDate: item.item.bookingDate,
+                allotmentDate: item.item.allotmentDate,
+                agreementDate: item.item.agreementDate,
+                paymentPlan: item.item.paymentPlan,
               });
             }}
           >
@@ -157,7 +160,8 @@ export default function BookingScreen() {
     ) {
       const newResponse = await getBookingDetails({
         tokenId: response.data.tokenId,
-        bookingId: 1,
+        customerCode: Constant.commonConstant.currentUserCustomerCode,
+        bookingId: Constant.commonConstant.currentUserBookingId,
       });
       if (
         newResponse &&

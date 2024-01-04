@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Colors, Fonts, Images, Constant } from "../../Theme/Index";
 import { Actions } from "react-native-router-flux";
-import { getToken, getUnitSummaryDetails } from "../Action/actions";
+import {
+  getToken,
+  getPaymentPlanDetails,
+  getUnitSummaryDetails,
+} from "../Action/actions";
 import Loader from "../../Component/Loader";
 import {
   StyleSheet,
@@ -17,6 +21,7 @@ import {
 export default function BookingDetailScreen(props) {
   const [tabIndex, setTabIndex] = useState(1);
   const [unitDetails, setUnitDetails] = useState({});
+  const [paymentPlanDetails, setPaymentPlanDetails] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
   const tabData = [
@@ -80,7 +85,8 @@ export default function BookingDetailScreen(props) {
     ) {
       const newResponse = await getUnitSummaryDetails({
         tokenId: response.data.tokenId,
-        bookingId: props.bookingId,
+        customerCode: Constant.commonConstant.currentUserCustomerCode,
+        bookingId: Constant.commonConstant.currentUserBookingId,
       });
       if (
         newResponse &&
@@ -99,8 +105,38 @@ export default function BookingDetailScreen(props) {
     }
   }
 
+  async function getPaymentPlanDetailsAPI() {
+    const response = await getToken(
+      Constant.commonConstant.email,
+      Constant.commonConstant.password
+    );
+    if (
+      response &&
+      response.status === Constant.apiResponse.success &&
+      response.data.status == Constant.apiResponse.status
+    ) {
+      const newResponse = await getPaymentPlanDetails({
+        tokenId: response.data.tokenId,
+        customerCode: Constant.commonConstant.currentUserCustomerCode,
+        bookingId: Constant.commonConstant.currentUserBookingId,
+      });
+      if (
+        newResponse &&
+        newResponse.status === Constant.apiResponse.success &&
+        newResponse.data[0].status == Constant.apiResponse.status
+      ) {
+        setPaymentPlanDetails(newResponse.data[0].message[0]);
+      } else {
+        setPaymentPlanDetails(null);
+      }
+    } else {
+      Constant.errorHandle(response);
+    }
+  }
+
   useEffect(() => {
     getUnitDetailsAPI();
+    getPaymentPlanDetailsAPI();
   }, []);
 
   return (
@@ -154,7 +190,13 @@ export default function BookingDetailScreen(props) {
               <Text style={styles.reportDateText}></Text>
             ) : (
               <Text style={styles.reportDateText}>
-                Report Generated On - Oct 14, 2021
+                {`Report Generated On - ${new Date(Date.now())
+                  .toLocaleString("en-US", { month: "short" })
+                  .toString()} ${new Date(Date.now())
+                  .getDate()
+                  .toString()}, ${new Date(Date.now())
+                  .getFullYear()
+                  .toString()}`}
               </Text>
             )}
 
@@ -167,7 +209,7 @@ export default function BookingDetailScreen(props) {
                     </View>
                     <View style={styles.verticalDivider}></View>
                     <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>23/10/2021</Text>
+                      <Text style={styles.boxText2}>{props.bookingDate}</Text>
                     </View>
                   </View>
                   <View style={styles.horizontalDivider}></View>
@@ -178,7 +220,7 @@ export default function BookingDetailScreen(props) {
                     </View>
                     <View style={styles.verticalDivider}></View>
                     <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>10/11/2021</Text>
+                      <Text style={styles.boxText2}>{props.allotmentDate}</Text>
                     </View>
                   </View>
                   <View style={styles.horizontalDivider}></View>
@@ -189,7 +231,7 @@ export default function BookingDetailScreen(props) {
                     </View>
                     <View style={styles.verticalDivider}></View>
                     <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>23/10/2022</Text>
+                      <Text style={styles.boxText2}>{props.agreementDate}</Text>
                     </View>
                   </View>
                   <View style={styles.horizontalDivider}></View>
@@ -200,9 +242,7 @@ export default function BookingDetailScreen(props) {
                     </View>
                     <View style={styles.verticalDivider}></View>
                     <View style={styles.subBoxContainer}>
-                      <Text
-                        style={styles.boxText2}
-                      >{`Possession Link\nPlan (20:80)`}</Text>
+                      <Text style={styles.boxText2}>{props.paymentPlan}</Text>
                     </View>
                   </View>
                 </View>
@@ -214,7 +254,7 @@ export default function BookingDetailScreen(props) {
                     </View>
                     <View style={styles.verticalDivider}></View>
                     <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>3LDK</Text>
+                      <Text style={styles.boxText2}>{unitDetails.project}</Text>
                     </View>
                   </View>
                   <View style={styles.horizontalDivider}></View>
@@ -252,7 +292,7 @@ export default function BookingDetailScreen(props) {
                     <View style={styles.verticalDivider}></View>
                     <View style={styles.subBoxContainer}>
                       <Text style={styles.boxText2}>
-                        {unitDetails.areaSqFt}
+                        {parseFloat(unitDetails.areaSqFt).toFixed(2)}
                       </Text>
                     </View>
                   </View>
@@ -265,18 +305,24 @@ export default function BookingDetailScreen(props) {
                     </View>
                     <View style={styles.verticalDivider}></View>
                     <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>Cash</Text>
+                      <Text style={styles.boxText2}>
+                        {paymentPlanDetails.eventDetails[0].paymentMode}
+                      </Text>
                     </View>
                   </View>
                   <View style={styles.horizontalDivider}></View>
 
                   <View style={styles.mainBoxSection}>
                     <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Pay Amount</Text>
+                      <Text style={styles.boxText1}>Paid Amount</Text>
                     </View>
                     <View style={styles.verticalDivider}></View>
                     <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>12 Lakh</Text>
+                      <Text style={styles.boxText2}>
+                        {parseFloat(
+                          paymentPlanDetails.totalUnitInterestReceivedAmount
+                        ).toFixed(2)}
+                      </Text>
                     </View>
                   </View>
                   <View style={styles.horizontalDivider}></View>
@@ -287,7 +333,11 @@ export default function BookingDetailScreen(props) {
                     </View>
                     <View style={styles.verticalDivider}></View>
                     <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>88 Lakh</Text>
+                      <Text style={styles.boxText2}>
+                        {parseFloat(
+                          paymentPlanDetails.totalUnitInterestOutstandingAmount
+                        ).toFixed(2)}
+                      </Text>
                     </View>
                   </View>
                   <View style={styles.horizontalDivider}></View>
@@ -298,9 +348,9 @@ export default function BookingDetailScreen(props) {
                     </View>
                     <View style={styles.verticalDivider}></View>
                     <View style={styles.subBoxContainer}>
-                      <Text
-                        style={styles.boxText2}
-                      >{`Possession Link\nPlan (20:80)`}</Text>
+                      <Text style={styles.boxText2}>
+                        {paymentPlanDetails.paymentPlan}
+                      </Text>
                     </View>
                   </View>
                 </View>
