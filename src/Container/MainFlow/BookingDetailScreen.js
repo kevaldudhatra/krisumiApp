@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Colors, Fonts, Images, Constant } from "../../Theme/Index";
 import { Actions } from "react-native-router-flux";
+import Loader from "../../Component/Loader";
 import {
   getToken,
   getPaymentPlanDetails,
   getUnitSummaryDetails,
 } from "../Action/actions";
-import Loader from "../../Component/Loader";
 import {
   StyleSheet,
   Text,
@@ -134,6 +134,65 @@ export default function BookingDetailScreen(props) {
     }
   }
 
+  function renderPlanDetailsData(item) {
+    return (
+      <View style={styles.paymentHistoryContainer}>
+        <View style={styles.mainBoxContainer}>
+          <View style={styles.mainBoxSection}>
+            <View style={styles.subBoxContainer}>
+              <Text style={styles.boxText1}>Payment Mode</Text>
+            </View>
+            <View style={styles.verticalDivider}></View>
+            <View style={styles.subBoxContainer}>
+              <Text style={styles.boxText2}>{item.item.paymentMode}</Text>
+            </View>
+          </View>
+          <View style={styles.horizontalDivider}></View>
+
+          <View style={styles.mainBoxSection}>
+            <View style={styles.subBoxContainer}>
+              <Text style={styles.boxText1}>Paid Amount</Text>
+            </View>
+            <View style={styles.verticalDivider}></View>
+            <View style={styles.subBoxContainer}>
+              <Text style={styles.boxText2}>
+                {parseFloat(item.item.totalScheduleReceivedAmount).toFixed(2)}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.horizontalDivider}></View>
+
+          <View style={styles.mainBoxSection}>
+            <View style={styles.subBoxContainer}>
+              <Text style={styles.boxText1}>Pending Payment</Text>
+            </View>
+            <View style={styles.verticalDivider}></View>
+            <View style={styles.subBoxContainer}>
+              <Text style={styles.boxText2}>
+                {parseFloat(item.item.totalScheduleOutstandingAmount).toFixed(
+                  2
+                )}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.horizontalDivider}></View>
+
+          <View style={styles.mainBoxSection}>
+            <View style={styles.subBoxContainer}>
+              <Text style={styles.boxText1}>Payment Plan</Text>
+            </View>
+            <View style={styles.verticalDivider}></View>
+            <View style={styles.subBoxContainer}>
+              <Text style={styles.boxText2}>
+                {paymentPlanDetails.paymentPlan}
+              </Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    );
+  }
+
   useEffect(() => {
     getUnitDetailsAPI();
     getPaymentPlanDetailsAPI();
@@ -170,7 +229,7 @@ export default function BookingDetailScreen(props) {
             )}
 
             <Text style={styles.subTitleText}>
-              {`Booking Code : ${unitDetails.customerCode}`}
+              {`Customer Code : ${unitDetails.customerCode}`}
             </Text>
 
             <View style={{ height: 70 }}>
@@ -254,7 +313,7 @@ export default function BookingDetailScreen(props) {
                     </View>
                     <View style={styles.verticalDivider}></View>
                     <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>{unitDetails.project}</Text>
+                      <Text style={styles.boxText2}>Residential</Text>
                     </View>
                   </View>
                   <View style={styles.horizontalDivider}></View>
@@ -292,67 +351,21 @@ export default function BookingDetailScreen(props) {
                     <View style={styles.verticalDivider}></View>
                     <View style={styles.subBoxContainer}>
                       <Text style={styles.boxText2}>
-                        {parseFloat(unitDetails.areaSqFt).toFixed(2)}
+                        {parseFloat(unitDetails.areaSqFt).toFixed(0)}
                       </Text>
                     </View>
                   </View>
                 </View>
               ) : tabIndex == 3 ? (
-                <View style={styles.mainBoxContainer}>
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Payment Mode</Text>
-                    </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>
-                        {paymentPlanDetails.eventDetails[0].paymentMode}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={styles.horizontalDivider}></View>
-
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Paid Amount</Text>
-                    </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>
-                        {parseFloat(
-                          paymentPlanDetails.totalUnitInterestReceivedAmount
-                        ).toFixed(2)}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={styles.horizontalDivider}></View>
-
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Pending Payment</Text>
-                    </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>
-                        {parseFloat(
-                          paymentPlanDetails.totalUnitInterestOutstandingAmount
-                        ).toFixed(2)}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={styles.horizontalDivider}></View>
-
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Payment Plan</Text>
-                    </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>
-                        {paymentPlanDetails.paymentPlan}
-                      </Text>
-                    </View>
-                  </View>
+                <View>
+                  <FlatList
+                    data={paymentPlanDetails.eventDetails}
+                    renderItem={(item) => renderPlanDetailsData(item)}
+                    extraData={paymentPlanDetails.eventDetails}
+                    keyExtractor={(item, index) => String(index)}
+                    scrollEnabled={true}
+                    onEndReachedThreshold={1}
+                  />
                 </View>
               ) : (
                 <View style={styles.mainBoxContainer}>
@@ -362,7 +375,7 @@ export default function BookingDetailScreen(props) {
                     </View>
                     <View style={styles.verticalDivider}></View>
                     <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>23/10/2021</Text>
+                      <Text style={styles.boxText2}>{props.bookingDate}</Text>
                     </View>
                   </View>
                   <View style={styles.horizontalDivider}></View>
@@ -373,7 +386,7 @@ export default function BookingDetailScreen(props) {
                     </View>
                     <View style={styles.verticalDivider}></View>
                     <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>10/11/2021</Text>
+                      <Text style={styles.boxText2}>{props.allotmentDate}</Text>
                     </View>
                   </View>
                   <View style={styles.horizontalDivider}></View>
@@ -384,7 +397,7 @@ export default function BookingDetailScreen(props) {
                     </View>
                     <View style={styles.verticalDivider}></View>
                     <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>23/10/2022</Text>
+                      <Text style={styles.boxText2}>{props.agreementDate}</Text>
                     </View>
                   </View>
                   <View style={styles.horizontalDivider}></View>
@@ -395,9 +408,7 @@ export default function BookingDetailScreen(props) {
                     </View>
                     <View style={styles.verticalDivider}></View>
                     <View style={styles.subBoxContainer}>
-                      <Text
-                        style={styles.boxText2}
-                      >{`Possession Link\nPlan (20:80)`}</Text>
+                      <Text style={styles.boxText2}>{props.paymentPlan}</Text>
                     </View>
                   </View>
                 </View>
@@ -551,6 +562,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     justifyContent: "center",
     flexDirection: "column",
+  },
+  paymentHistoryContainer: {
+    marginBottom: 15,
   },
   whatsAppIcon: { height: 35, width: 35, marginBottom: 15 },
   phoneIcon: { height: 35, width: 35 },

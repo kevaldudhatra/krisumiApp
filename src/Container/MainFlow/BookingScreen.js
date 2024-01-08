@@ -55,7 +55,7 @@ export default function BookingScreen() {
       <>
         <Text
           style={styles.subTitleText}
-        >{`Booking Code : ${item.item.customerCode}`}</Text>
+        >{`Customer Code : ${item.item.customerCode}`}</Text>
         <View style={styles.subContainer}>
           <View style={styles.titleContainer}>
             <Text style={styles.titleContainerText}>{item.item.project}</Text>
@@ -99,16 +99,18 @@ export default function BookingScreen() {
             />
           </View>
 
-          <Text numberOfLines={3} style={styles.discriptionText}>
-            {
-              "Japanese landscaping emphasizes natural elements, eschewing artificial ornamentation."
-            }
+          <Text style={styles.discriptionText}>
+            {item.item.project == "Waterfall Residences"
+              ? "Waterfall Residences has been designed based on the Japanese style of art and architecture to provide enduring value to the residents."
+              : item.item.project == "Waterfall Suites"
+              ? "Inspired by the serene SHIRAITO WATERFALL, the design of Waterfall Suites weaves in elements of stream, thread and calmness of water into the facade."
+              : null}
           </Text>
 
           <View style={styles.boxContainer}>
             <View style={styles.boxSubContainer}>
               <Text style={styles.boxTitleText}>Project Type</Text>
-              <Text style={styles.boxSubTitleText}>{item.item.project}</Text>
+              <Text style={styles.boxSubTitleText}>Residential</Text>
             </View>
             <View style={styles.verticalDivider}></View>
             <View style={styles.boxSubContainer}>
@@ -210,7 +212,9 @@ export default function BookingScreen() {
               <View style={styles.blankButton}></View>
             </View>
 
-            <Text style={styles.titleText}>Booked Units</Text>
+            <Text
+              style={styles.titleText}
+            >{`Booked Units : ${userData[0]?.unitNumber}`}</Text>
 
             {userData.length > 0 ? (
               <FlatList
