@@ -23,15 +23,11 @@ export default function BookingScreen() {
   const data = [
     {
       id: 1,
-      url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      url: Images.projectImg1,
     },
     {
       id: 2,
-      url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
-    },
-    {
-      id: 3,
-      url: "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=692&q=80",
+      url: Images.projectImg2,
     },
   ];
 
@@ -40,12 +36,13 @@ export default function BookingScreen() {
       <Image
         style={{
           height: 135,
+          width: Dimensions.get("window").width - 60,
           borderRadius: 10,
           marginHorizontal: 10,
           marginTop: 10,
           resizeMode: "cover",
         }}
-        source={{ uri: item.url }}
+        source={item.url}
       ></Image>
     );
   };

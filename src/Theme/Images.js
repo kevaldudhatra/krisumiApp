@@ -19,4 +19,6 @@ export default {
   darkWhatsappIcon: require("../icon/darkWhatsappIcon.png"),
   cameraIcon: require("../icon/camera.png"),
   galleryIcon: require("../icon/gallery.png"),
+  projectImg1: require("../icon/projectImg1.png"),
+  projectImg2: require("../icon/projectImg2.png"),
 };
