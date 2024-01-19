@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Colors, Fonts, Images, ScreenName, Constant } from "../../Theme/Index";
 import { Actions } from "react-native-router-flux";
-import Carousel, { Pagination } from "react-native-snap-carousel";
 import { getToken, getBookingDetails } from "../Action/actions";
 import Loader from "../../Component/Loader";
 import {
@@ -16,36 +15,8 @@ import {
 } from "react-native";
 
 export default function BookingScreen() {
-  const [index, setIndex] = useState(0);
   const [userData, setUserData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
-  const data = [
-    {
-      id: 1,
-      url: Images.projectImg1,
-    },
-    {
-      id: 2,
-      url: Images.projectImg2,
-    },
-  ];
-
-  const renderItem = ({ item }) => {
-    return (
-      <Image
-        style={{
-          height: 135,
-          width: Dimensions.get("window").width - 60,
-          borderRadius: 10,
-          marginHorizontal: 10,
-          marginTop: 10,
-          resizeMode: "cover",
-        }}
-        source={item.url}
-      ></Image>
-    );
-  };
 
   const renderMainItem = (item) => {
     return (
@@ -58,42 +29,19 @@ export default function BookingScreen() {
             <Text style={styles.titleContainerText}>{item.item.project}</Text>
           </View>
 
-          <View style={{ alignSelf: "center", flex: 1 }}>
-            <Carousel
-              data={data}
-              renderItem={renderItem}
-              sliderWidth={Dimensions.get("window").width - 40}
-              itemWidth={Dimensions.get("window").width - 40}
-              onSnapToItem={(index) => setIndex(index)}
-            />
-            <Pagination
-              dotsLength={data.length}
-              activeDotIndex={index}
-              containerStyle={{
-                paddingTop: 15,
-                paddingBottom: 10,
-                width: data.length * 10 + 20,
-                alignSelf: "center",
-              }}
-              dotStyle={{
-                width: 10,
-                height: 10,
-                borderRadius: 5,
-                borderWidth: 1,
-                borderColor: Colors.activeDotColor,
-                backgroundColor: Colors.activeDotColor,
-              }}
-              inactiveDotStyle={{
-                width: 10,
-                height: 10,
-                borderRadius: 5,
-                borderWidth: 1,
-                borderColor: Colors.borderColor,
-                backgroundColor: Colors.borderColor,
-              }}
-              inactiveDotOpacity={1}
-              inactiveDotScale={0.7}
-            />
+          <View
+            style={{
+              alignSelf: "center",
+              flex: 1,
+              marginBottom: 10,
+              marginTop: 10,
+            }}
+          >
+            <Image
+              style={styles.projectImageView}
+              resizeMode="cover"
+              source={Images.projectImg1}
+            ></Image>
           </View>
 
           <Text style={styles.discriptionText}>
@@ -128,6 +76,10 @@ export default function BookingScreen() {
                 allotmentDate: item.item.allotmentDate,
                 agreementDate: item.item.agreementDate,
                 paymentPlan: item.item.paymentPlan,
+                paymentSource: item.item.paymentSource,
+                bankOrFinanceInstitutionName:
+                  item.item.bankOrFinanceInstitutionName,
+                loanAmount: item.item.loanAmount,
               });
             }}
           >
@@ -189,6 +141,7 @@ export default function BookingScreen() {
         <Loader isLoading={isLoading}></Loader>
       ) : (
         <ScrollView
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.white }}
         >
           <View style={styles.mainContainer}>
@@ -329,6 +282,11 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.RobotoMedium,
     color: Colors.arrowColor,
     alignSelf: "flex-start",
+  },
+  projectImageView: {
+    width: Dimensions.get("window").width - 60,
+    height: 150,
+    borderRadius: 10,
   },
   discriptionText: {
     fontSize: 15,

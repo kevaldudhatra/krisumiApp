@@ -19,6 +19,7 @@ import {
 export default function HomeScreen() {
   const [name, setName] = useState(null);
   const [number, setNumber] = useState(null);
+  const [email, setEmail] = useState(null);
   const [project, setProject] = useState(null);
   const [showModel, setShowModel] = useState(false);
   const [image, setImage] = useState(null);
@@ -48,6 +49,7 @@ export default function HomeScreen() {
         setIsLoading(false);
         setName(newResponse.data[0].message[0].customerName);
         setNumber(newResponse.data[0].message[0].phoneNumber);
+        setEmail(newResponse.data[0].message[0].emailId);
         setProject(newResponse.data[0].message[0].project);
         Constant.commonConstant.currentUserBookingId =
           newResponse.data[0].message[0].bookingId;
@@ -57,6 +59,7 @@ export default function HomeScreen() {
         setIsLoading(false);
         setName(null);
         setNumber(null);
+        setEmail(null);
         setProject(null);
         Constant.commonConstant.currentUserBookingId = null;
         Constant.commonConstant.currentUserCustomerCode = null;
@@ -65,6 +68,7 @@ export default function HomeScreen() {
       setIsLoading(false);
       setName(null);
       setNumber(null);
+      setEmail(null);
       setProject(null);
       Constant.commonConstant.currentUserBookingId = null;
       Constant.commonConstant.currentUserCustomerCode = null;
@@ -150,6 +154,7 @@ export default function HomeScreen() {
         <Loader isLoading={isLoading}></Loader>
       ) : (
         <ScrollView
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.white }}
         >
           <View style={styles.mainContainer}>
@@ -181,6 +186,8 @@ export default function HomeScreen() {
             <Text style={styles.userPhoneNumber}>
               {number === null ? "9876543210" : number}
             </Text>
+
+            <Text style={styles.userEmail}>{email === null ? "" : email}</Text>
 
             <TouchableOpacity
               onPress={() => {
@@ -331,6 +338,12 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   userPhoneNumber: {
+    fontSize: 16,
+    fontFamily: Fonts.RobotoRegular,
+    color: Colors.goldColorText,
+    alignSelf: "center",
+  },
+  userEmail: {
     fontSize: 16,
     fontFamily: Fonts.RobotoRegular,
     color: Colors.goldColorText,

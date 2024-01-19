@@ -71,6 +71,7 @@ export default function LoginScreen() {
 
   return (
     <ScrollView
+      showsVerticalScrollIndicator={false}
       contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.white }}
     >
       <Loader isLoading={isLoading}></Loader>

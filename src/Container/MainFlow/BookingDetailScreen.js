@@ -204,6 +204,7 @@ export default function BookingDetailScreen(props) {
         <Loader isLoading={isLoading}></Loader>
       ) : (
         <ScrollView
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.white }}
         >
           <View style={styles.mainContainer}>
@@ -302,6 +303,43 @@ export default function BookingDetailScreen(props) {
                     <View style={styles.verticalDivider}></View>
                     <View style={styles.subBoxContainer}>
                       <Text style={styles.boxText2}>{props.paymentPlan}</Text>
+                    </View>
+                  </View>
+                  <View style={styles.horizontalDivider}></View>
+
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Payment Source</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText2}>{props.paymentSource}</Text>
+                    </View>
+                  </View>
+                  <View style={styles.horizontalDivider}></View>
+
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Bank / F.I. Name</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText2}>
+                        {props.bankOrFinanceInstitutionName}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.horizontalDivider}></View>
+
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Loan Amount</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText2}>
+                        {parseFloat(props.loanAmount).toFixed(2)}
+                      </Text>
                     </View>
                   </View>
                 </View>
@@ -411,6 +449,43 @@ export default function BookingDetailScreen(props) {
                       <Text style={styles.boxText2}>{props.paymentPlan}</Text>
                     </View>
                   </View>
+                  <View style={styles.horizontalDivider}></View>
+
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Payment Source</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText2}>{props.paymentSource}</Text>
+                    </View>
+                  </View>
+                  <View style={styles.horizontalDivider}></View>
+
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Bank / F.I. Name</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText2}>
+                        {props.bankOrFinanceInstitutionName}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.horizontalDivider}></View>
+
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Loan Amount</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText2}>
+                        {parseFloat(props.loanAmount).toFixed(2)}
+                      </Text>
+                    </View>
+                  </View>
                 </View>
               )}
             </View>
@@ -503,7 +578,6 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   mainBoxContainer: {
-    height: 243,
     backgroundColor: Colors.backgroundColor,
     borderColor: Colors.borderColor,
     borderWidth: 1,

@@ -57,7 +57,10 @@ export default function RaiseTicketScreen() {
   }
 
   return (
-    <KeyboardAwareScrollView style={{ flex: 1, backgroundColor: Colors.white }}>
+    <KeyboardAwareScrollView
+      showsVerticalScrollIndicator={false}
+      style={{ flex: 1, backgroundColor: Colors.white }}
+    >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View>
           <Loader isLoading={isLoading}></Loader>
