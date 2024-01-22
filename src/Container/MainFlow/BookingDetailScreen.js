@@ -393,6 +393,37 @@ export default function BookingDetailScreen(props) {
                       </Text>
                     </View>
                   </View>
+                  <View style={styles.horizontalDivider}></View>
+                  <>
+                    <FlatList
+                      data={unitDetails.chargeDetails}
+                      renderItem={({ item, index }) => (
+                        <>
+                          <View style={styles.mainBoxSection}>
+                            <View style={styles.subBoxContainer}>
+                              <Text style={styles.boxText1}>
+                                {item.chargeName}
+                              </Text>
+                            </View>
+                            <View style={styles.verticalDivider}></View>
+                            <View style={styles.subBoxContainer}>
+                              <Text style={styles.boxText2}>
+                                {parseFloat(item.amount).toFixed(2)}
+                              </Text>
+                            </View>
+                          </View>
+                          {unitDetails.chargeDetails.length - 1 ===
+                          index ? null : (
+                            <View style={styles.horizontalDivider}></View>
+                          )}
+                        </>
+                      )}
+                      extraData={unitDetails.chargeDetails}
+                      keyExtractor={(item, index) => String(index)}
+                      scrollEnabled={true}
+                      onEndReachedThreshold={1}
+                    />
+                  </>
                 </View>
               ) : tabIndex == 3 ? (
                 <View>
