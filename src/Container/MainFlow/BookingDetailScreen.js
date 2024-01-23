@@ -6,6 +6,7 @@ import {
   getToken,
   getPaymentPlanDetails,
   getUnitSummaryDetails,
+  getStatementSummaryDetails,
 } from "../Action/actions";
 import {
   StyleSheet,
@@ -22,6 +23,7 @@ export default function BookingDetailScreen(props) {
   const [tabIndex, setTabIndex] = useState(1);
   const [unitDetails, setUnitDetails] = useState({});
   const [paymentPlanDetails, setPaymentPlanDetails] = useState({});
+  const [statementSummaryDetails, setStatementSummaryDetails] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
   const tabData = [
@@ -36,6 +38,10 @@ export default function BookingDetailScreen(props) {
     {
       id: 3,
       tabName: "Payment History",
+    },
+    {
+      id: 4,
+      tabName: "Statement Summary",
     },
   ];
 
@@ -134,6 +140,35 @@ export default function BookingDetailScreen(props) {
     }
   }
 
+  async function getStatementSummaryDetailsAPI() {
+    const response = await getToken(
+      Constant.commonConstant.email,
+      Constant.commonConstant.password
+    );
+    if (
+      response &&
+      response.status === Constant.apiResponse.success &&
+      response.data.status == Constant.apiResponse.status
+    ) {
+      const newResponse = await getStatementSummaryDetails({
+        tokenId: response.data.tokenId,
+        customerCode: Constant.commonConstant.currentUserCustomerCode,
+        bookingId: Constant.commonConstant.currentUserBookingId,
+      });
+      if (
+        newResponse &&
+        newResponse.status === Constant.apiResponse.success &&
+        newResponse.data[0].status == Constant.apiResponse.status
+      ) {
+        setStatementSummaryDetails(newResponse.data[0].message[0]);
+      } else {
+        setStatementSummaryDetails(null);
+      }
+    } else {
+      Constant.errorHandle(response);
+    }
+  }
+
   function renderPlanDetailsData(item) {
     return (
       <View style={styles.paymentHistoryContainer}>
@@ -196,6 +231,7 @@ export default function BookingDetailScreen(props) {
   useEffect(() => {
     getUnitDetailsAPI();
     getPaymentPlanDetailsAPI();
+    getStatementSummaryDetailsAPI();
   }, []);
 
   return (
@@ -435,6 +471,52 @@ export default function BookingDetailScreen(props) {
                     scrollEnabled={true}
                     onEndReachedThreshold={1}
                   />
+                </View>
+              ) : tabIndex == 4 ? (
+                <View style={styles.mainBoxContainer}>
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Total Dues</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText2}>
+                        {parseFloat(
+                          statementSummaryDetails.totalDueAmount
+                        ).toFixed(2)}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.horizontalDivider}></View>
+
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Total Receipts</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText2}>
+                        {parseFloat(
+                          statementSummaryDetails.totalReceivedAmount
+                        ).toFixed(2)}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.horizontalDivider}></View>
+
+                  <View style={styles.mainBoxSection}>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText1}>Outstanding Balance</Text>
+                    </View>
+                    <View style={styles.verticalDivider}></View>
+                    <View style={styles.subBoxContainer}>
+                      <Text style={styles.boxText2}>
+                        {parseFloat(
+                          statementSummaryDetails.totalOutstandingAmount
+                        ).toFixed(2)}
+                      </Text>
+                    </View>
+                  </View>
                 </View>
               ) : (
                 <View style={styles.mainBoxContainer}>

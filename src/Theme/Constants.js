@@ -11,6 +11,7 @@ export const API = {
   getBookingDetails: baseURL.URL + "/GetBookingDetails",
   getUnitSummaryDetails: baseURL.URL + "/GetUnitSummaryDetails",
   getPaymentPlanDetails: baseURL.URL + "/GetPaymentPlanDetails",
+  getStatementSummaryDetails: baseURL.URL + "/GetStatementSummaryDetails",
   addContactUsRequest: "https://krisumi.virvainfotech.com/api/v1/add/enquiry",
   raiseTicketRequest: "https://krisumi.virvainfotech.com/api/v1/add/ticket",
 };

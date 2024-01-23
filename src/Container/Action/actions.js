@@ -85,6 +85,24 @@ export function getPaymentPlanDetails(param) {
     });
 }
 
+export function getStatementSummaryDetails(param) {
+  return Axios.post(Constants.API.getStatementSummaryDetails, param)
+    .then(function (response) {
+      console.log(
+        "getStatementSummaryDetails api call success => ",
+        JSON.stringify(response)
+      );
+      return response;
+    })
+    .catch(function (error) {
+      console.log(
+        "getStatementSummaryDetails api call fail => ",
+        JSON.stringify(error.response)
+      );
+      return error.response;
+    });
+}
+
 export function addContactUsRequest(param) {
   return Axios.post(Constants.API.addContactUsRequest, param)
     .then(function (response) {
