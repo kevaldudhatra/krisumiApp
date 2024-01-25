@@ -43,6 +43,10 @@ export default function BookingDetailScreen(props) {
       id: 4,
       tabName: "Statement Summary",
     },
+    {
+      id: 5,
+      tabName: "Payment Plan & Schedule",
+    },
   ];
 
   const renderItem = ({ item }) => {
@@ -191,7 +195,12 @@ export default function BookingDetailScreen(props) {
             <View style={styles.verticalDivider}></View>
             <View style={styles.subBoxContainer}>
               <Text style={styles.boxText2}>
-                {parseFloat(item.item.totalScheduleReceivedAmount).toFixed(2)}
+                {`₹ ${parseFloat(
+                  item.item.totalScheduleReceivedAmount
+                ).toLocaleString("en-IN", {
+                  maximumFractionDigits: 2,
+                  currency: "INR",
+                })}`}
               </Text>
             </View>
           </View>
@@ -204,9 +213,12 @@ export default function BookingDetailScreen(props) {
             <View style={styles.verticalDivider}></View>
             <View style={styles.subBoxContainer}>
               <Text style={styles.boxText2}>
-                {parseFloat(item.item.totalScheduleOutstandingAmount).toFixed(
-                  2
-                )}
+                {`₹ ${parseFloat(
+                  item.item.totalScheduleOutstandingAmount
+                ).toLocaleString("en-IN", {
+                  maximumFractionDigits: 2,
+                  currency: "INR",
+                })}`}
               </Text>
             </View>
           </View>
@@ -220,6 +232,65 @@ export default function BookingDetailScreen(props) {
             <View style={styles.subBoxContainer}>
               <Text style={styles.boxText2}>
                 {paymentPlanDetails.paymentPlan}
+              </Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    );
+  }
+
+  function renderPlanAndScheduleData(item) {
+    return (
+      <View style={styles.paymentHistoryContainer}>
+        <View style={styles.mainBoxContainer}>
+          <View style={styles.mainBoxSection}>
+            <View style={styles.subBoxContainer}>
+              <Text style={styles.boxText1}>Event Name</Text>
+            </View>
+            <View style={styles.verticalDivider}></View>
+            <View style={styles.subBoxContainer}>
+              <Text style={styles.boxText2}>{item.item.eventName}</Text>
+            </View>
+          </View>
+          <View style={styles.horizontalDivider}></View>
+
+          <View style={styles.mainBoxSection}>
+            <View style={styles.subBoxContainer}>
+              <Text style={styles.boxText1}>Payment Due Date</Text>
+            </View>
+            <View style={styles.verticalDivider}></View>
+            <View style={styles.subBoxContainer}>
+              <Text style={styles.boxText2}>{item.item.paymentDueDate}</Text>
+            </View>
+          </View>
+          <View style={styles.horizontalDivider}></View>
+
+          <View style={styles.mainBoxSection}>
+            <View style={styles.subBoxContainer}>
+              <Text style={styles.boxText1}>Payment Mode</Text>
+            </View>
+            <View style={styles.verticalDivider}></View>
+            <View style={styles.subBoxContainer}>
+              <Text style={styles.boxText2}>{item.item.paymentMode}</Text>
+            </View>
+          </View>
+          <View style={styles.horizontalDivider}></View>
+
+          <View style={styles.mainBoxSection}>
+            <View style={styles.subBoxContainer}>
+              <Text style={styles.boxText1}>Total Schedule Amount</Text>
+            </View>
+            <View style={styles.verticalDivider}></View>
+            <View style={styles.subBoxContainer}>
+              <Text style={styles.boxText2}>
+                {`₹ ${parseFloat(item.item.totalScheduleAmount).toLocaleString(
+                  "en-IN",
+                  {
+                    maximumFractionDigits: 2,
+                    currency: "INR",
+                  }
+                )}`}
               </Text>
             </View>
           </View>
@@ -261,9 +332,7 @@ export default function BookingDetailScreen(props) {
               <View style={styles.blankButton}></View>
             </View>
 
-            {tabIndex != 2 && (
-              <Text style={styles.titleText}>{unitDetails.project}</Text>
-            )}
+            <Text style={styles.titleText}>{unitDetails.project}</Text>
 
             <Text style={styles.subTitleText}>
               {`Customer Code : ${unitDetails.customerCode}`}
@@ -298,158 +367,220 @@ export default function BookingDetailScreen(props) {
 
             <View>
               {tabIndex == 1 ? (
-                <View style={styles.mainBoxContainer}>
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Booking Date</Text>
+                <>
+                  <View style={styles.mainBoxContainer}>
+                    <View style={styles.mainBoxSection}>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText1}>Booking Date</Text>
+                      </View>
+                      <View style={styles.verticalDivider}></View>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText2}>{props.bookingDate}</Text>
+                      </View>
                     </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>{props.bookingDate}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.horizontalDivider}></View>
+                    <View style={styles.horizontalDivider}></View>
 
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Allotment Date</Text>
+                    <View style={styles.mainBoxSection}>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText1}>Allotment Date</Text>
+                      </View>
+                      <View style={styles.verticalDivider}></View>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText2}>
+                          {props.allotmentDate}
+                        </Text>
+                      </View>
                     </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>{props.allotmentDate}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.horizontalDivider}></View>
+                    <View style={styles.horizontalDivider}></View>
 
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Agreement Date</Text>
+                    <View style={styles.mainBoxSection}>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText1}>Agreement Date</Text>
+                      </View>
+                      <View style={styles.verticalDivider}></View>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText2}>
+                          {props.agreementDate}
+                        </Text>
+                      </View>
                     </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>{props.agreementDate}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.horizontalDivider}></View>
+                    <View style={styles.horizontalDivider}></View>
 
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Payment Plan</Text>
+                    <View style={styles.mainBoxSection}>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText1}>Payment Plan</Text>
+                      </View>
+                      <View style={styles.verticalDivider}></View>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText2}>{props.paymentPlan}</Text>
+                      </View>
                     </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>{props.paymentPlan}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.horizontalDivider}></View>
+                    <View style={styles.horizontalDivider}></View>
 
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Payment Source</Text>
+                    <View style={styles.mainBoxSection}>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText1}>Payment Source</Text>
+                      </View>
+                      <View style={styles.verticalDivider}></View>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText2}>
+                          {props.paymentSource}
+                        </Text>
+                      </View>
                     </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>{props.paymentSource}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.horizontalDivider}></View>
+                    <View style={styles.horizontalDivider}></View>
 
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Bank / F.I. Name</Text>
+                    <View style={styles.mainBoxSection}>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText1}>Bank / F.I. Name</Text>
+                      </View>
+                      <View style={styles.verticalDivider}></View>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText2}>
+                          {props.bankOrFinanceInstitutionName}
+                        </Text>
+                      </View>
                     </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>
-                        {props.bankOrFinanceInstitutionName}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={styles.horizontalDivider}></View>
+                    <View style={styles.horizontalDivider}></View>
 
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Loan Amount</Text>
-                    </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>
-                        {parseFloat(props.loanAmount).toFixed(2)}
-                      </Text>
+                    <View style={styles.mainBoxSection}>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText1}>Loan Amount</Text>
+                      </View>
+                      <View style={styles.verticalDivider}></View>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText2}>
+                          {`₹ ${parseFloat(props.loanAmount).toLocaleString(
+                            "en-IN",
+                            {
+                              maximumFractionDigits: 2,
+                              currency: "INR",
+                            }
+                          )}`}
+                        </Text>
+                      </View>
                     </View>
                   </View>
-                </View>
+                  <Text style={styles.notesText}>Notes :</Text>
+                  <View style={styles.notesTextSubView}>
+                    <View style={styles.notesPoints}></View>
+                    <Text style={styles.notesSubText}>
+                      Discrepancies if any, should be brought to the notice of
+                      the company immediately
+                    </Text>
+                  </View>
+                  <View style={styles.notesTextSubView}>
+                    <View style={styles.notesPoints}></View>
+                    <Text style={styles.notesSubText}>
+                      Applicant details or any other information doesn't entitle
+                      user/applicant/customer(s) to claim ownership of aforesaid
+                      property unless the conveyance deed is executed in favour
+                      of the user/applicant/customer(s) by the company.
+                    </Text>
+                  </View>
+                </>
               ) : tabIndex == 2 ? (
-                <View style={styles.mainBoxContainer}>
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Project Type</Text>
+                <>
+                  <View style={styles.mainBoxContainer}>
+                    <View style={styles.mainBoxSection}>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText1}>Project Type</Text>
+                      </View>
+                      <View style={styles.verticalDivider}></View>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText2}>Residential</Text>
+                      </View>
                     </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>Residential</Text>
-                    </View>
-                  </View>
-                  <View style={styles.horizontalDivider}></View>
+                    <View style={styles.horizontalDivider}></View>
 
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Unit Type</Text>
+                    <View style={styles.mainBoxSection}>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText1}>Unit Type</Text>
+                      </View>
+                      <View style={styles.verticalDivider}></View>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText2}>
+                          {unitDetails.unitType}
+                        </Text>
+                      </View>
                     </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>
-                        {unitDetails.unitType}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={styles.horizontalDivider}></View>
+                    <View style={styles.horizontalDivider}></View>
 
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Unit No</Text>
+                    <View style={styles.mainBoxSection}>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText1}>Unit No</Text>
+                      </View>
+                      <View style={styles.verticalDivider}></View>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText2}>
+                          {unitDetails.unitNumber}
+                        </Text>
+                      </View>
                     </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>
-                        {unitDetails.unitNumber}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={styles.horizontalDivider}></View>
+                    <View style={styles.horizontalDivider}></View>
 
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Area sq.ft</Text>
-                    </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>
-                        {parseFloat(unitDetails.areaSqFt).toFixed(0)}
-                      </Text>
+                    <View style={styles.mainBoxSection}>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText1}>Area sq.ft</Text>
+                      </View>
+                      <View style={styles.verticalDivider}></View>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText2}>
+                          {`₹ ${parseFloat(unitDetails.areaSqFt).toLocaleString(
+                            "en-IN",
+                            {
+                              maximumFractionDigits: 2,
+                              currency: "INR",
+                            }
+                          )}`}
+                        </Text>
+                      </View>
                     </View>
                   </View>
-                  <View style={styles.horizontalDivider}></View>
-                  <>
+                  <View style={{ height: 20 }}></View>
+                  <View style={styles.mainBoxContainer}>
                     <FlatList
                       data={unitDetails.chargeDetails}
                       renderItem={({ item, index }) => (
                         <>
-                          <View style={styles.mainBoxSection}>
-                            <View style={styles.subBoxContainer}>
-                              <Text style={styles.boxText1}>
-                                {item.chargeName}
-                              </Text>
+                          {item.chargeName == "SGST-SGST @2.5%" ? null : (
+                            <View style={styles.mainBoxSection}>
+                              <View style={styles.subBoxContainer}>
+                                <Text style={styles.boxText1}>
+                                  {item.chargeName == "IFMS"
+                                    ? "Interest Free Maintenance Security Deposit (IFMSD)"
+                                    : item.chargeName == "Other Charges"
+                                    ? "Other Charges (Electricity, Water, Gas Connection & Meter Charges)"
+                                    : item.chargeName == "CGST-CGST @2.5%"
+                                    ? "Goods & Service Tex * (GST)"
+                                    : item.chargeName}
+                                </Text>
+                              </View>
+                              <View style={styles.verticalDivider}></View>
+                              <View style={styles.subBoxContainer}>
+                                <Text style={styles.boxText2}>
+                                  {item.chargeName == "CGST-CGST @2.5%"
+                                    ? `₹ ${parseFloat(
+                                        item.amount * 2
+                                      ).toLocaleString("en-IN", {
+                                        maximumFractionDigits: 2,
+                                        currency: "INR",
+                                      })}`
+                                    : `₹ ${parseFloat(
+                                        item.amount
+                                      ).toLocaleString("en-IN", {
+                                        maximumFractionDigits: 2,
+                                        currency: "INR",
+                                      })}`}
+                                </Text>
+                              </View>
                             </View>
-                            <View style={styles.verticalDivider}></View>
-                            <View style={styles.subBoxContainer}>
-                              <Text style={styles.boxText2}>
-                                {parseFloat(item.amount).toFixed(2)}
-                              </Text>
-                            </View>
-                          </View>
-                          {unitDetails.chargeDetails.length - 1 ===
-                          index ? null : (
+                          )}
+                          {item.chargeName ==
+                          "SGST-SGST @2.5%" ? null : unitDetails.chargeDetails
+                              .length -
+                              2 ===
+                            index ? null : (
                             <View style={styles.horizontalDivider}></View>
                           )}
                         </>
@@ -459,8 +590,8 @@ export default function BookingDetailScreen(props) {
                       scrollEnabled={true}
                       onEndReachedThreshold={1}
                     />
-                  </>
-                </View>
+                  </View>
+                </>
               ) : tabIndex == 3 ? (
                 <View>
                   <FlatList
@@ -473,133 +604,252 @@ export default function BookingDetailScreen(props) {
                   />
                 </View>
               ) : tabIndex == 4 ? (
-                <View style={styles.mainBoxContainer}>
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Total Dues</Text>
+                <>
+                  <View style={styles.mainBoxContainer}>
+                    <View style={styles.mainBoxSection}>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText1}>Total Dues</Text>
+                      </View>
+                      <View style={styles.verticalDivider}></View>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText2}>
+                          {`₹ ${parseFloat(
+                            statementSummaryDetails.totalDueAmount
+                          ).toLocaleString("en-IN", {
+                            maximumFractionDigits: 2,
+                            currency: "INR",
+                          })}`}
+                        </Text>
+                      </View>
                     </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>
-                        {parseFloat(
-                          statementSummaryDetails.totalDueAmount
-                        ).toFixed(2)}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={styles.horizontalDivider}></View>
+                    <View style={styles.horizontalDivider}></View>
 
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Total Receipts</Text>
+                    <View style={styles.mainBoxSection}>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText1}>Total Receipts</Text>
+                      </View>
+                      <View style={styles.verticalDivider}></View>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText2}>
+                          {`₹ ${parseFloat(
+                            statementSummaryDetails.totalReceivedAmount
+                          ).toLocaleString("en-IN", {
+                            maximumFractionDigits: 2,
+                            currency: "INR",
+                          })}`}
+                        </Text>
+                      </View>
                     </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>
-                        {parseFloat(
-                          statementSummaryDetails.totalReceivedAmount
-                        ).toFixed(2)}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={styles.horizontalDivider}></View>
+                    <View style={styles.horizontalDivider}></View>
 
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Outstanding Balance</Text>
-                    </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>
-                        {parseFloat(
-                          statementSummaryDetails.totalOutstandingAmount
-                        ).toFixed(2)}
-                      </Text>
+                    <View style={styles.mainBoxSection}>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText1}>Outstanding Balance</Text>
+                      </View>
+                      <View style={styles.verticalDivider}></View>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText2}>
+                          {`₹ ${parseFloat(
+                            statementSummaryDetails.totalOutstandingAmount
+                          ).toLocaleString("en-IN", {
+                            maximumFractionDigits: 2,
+                            currency: "INR",
+                          })}`}
+                        </Text>
+                      </View>
                     </View>
                   </View>
+                  <Text style={styles.notesText}>Notes :</Text>
+                  <View style={styles.notesTextSubView}>
+                    <View style={styles.notesPoints}></View>
+                    <Text style={styles.notesSubText}>
+                      If the payments is made through cheque then the payment is
+                      subject to realization of the same.
+                    </Text>
+                  </View>
+                  <View style={styles.notesTextSubView}>
+                    <View style={styles.notesPoints}></View>
+                    <Text style={styles.notesSubText}>
+                      The Total Dues is inclusive of installment amount Due till
+                      date + interest amount accumulated and due on the unit.
+                    </Text>
+                  </View>
+                  <View style={styles.notesTextSubView}>
+                    <View style={styles.notesPoints}></View>
+                    <Text style={styles.notesSubText}>
+                      TDS Credit has been given only for those certificates
+                      which has been submitted in original.
+                    </Text>
+                  </View>
+                  <View style={styles.notesTextSubView}>
+                    <View style={styles.notesPoints}></View>
+                    <Text style={styles.notesSubText}>
+                      Interest accumulated as on date is Rs (interest_amount :
+                      Postman se yeh detail fetch karni hai dynamically) /-
+                      (excluding GST), on all non-timely payments. You are
+                      requested to clear your interest dues along with
+                      installment dues. You can raise request with our Customer
+                      Services Team to share detailed interest sheet for your
+                      record.
+                    </Text>
+                  </View>
+                  <View style={styles.notesTextSubView}>
+                    <View style={styles.notesPoints}></View>
+                    <Text style={styles.notesSubText}>
+                      The rate of interest on delayed payments shall vary from
+                      time to time as per the State Bank of India highest
+                      marginal cost of lending rate plus 2% (two percent).
+                    </Text>
+                  </View>
+                  <View style={styles.notesTextSubView}>
+                    <View style={styles.notesPoints}></View>
+                    <Text style={styles.notesSubText}>
+                      For more details kindly raise a request with our customer
+                      services team for the detailed statement of accounts for
+                      your own record.
+                    </Text>
+                  </View>
+                  <View style={styles.notesTextSubView}>
+                    <View style={styles.notesPoints}></View>
+                    <Text style={styles.notesSubText}>
+                      Discrepancies if any, should be brought to the notice of
+                      the company immediately.
+                    </Text>
+                  </View>
+                  <View style={styles.notesTextSubView}>
+                    <View style={styles.notesPoints}></View>
+                    <Text style={styles.notesSubText}>
+                      Applicant details or any other information doesn't entitle
+                      user/applicant/customer(s) to claim ownership of aforesaid
+                      property unless the conveyance deed is executed in favour
+                      of the user/applicant/customer(s) by the company.
+                    </Text>
+                  </View>
+                </>
+              ) : tabIndex == 5 ? (
+                <View>
+                  <FlatList
+                    data={paymentPlanDetails.eventDetails}
+                    renderItem={(item) => renderPlanAndScheduleData(item)}
+                    extraData={paymentPlanDetails.eventDetails}
+                    keyExtractor={(item, index) => String(index)}
+                    scrollEnabled={true}
+                    onEndReachedThreshold={1}
+                  />
                 </View>
               ) : (
-                <View style={styles.mainBoxContainer}>
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Booking Date</Text>
+                <>
+                  <View style={styles.mainBoxContainer}>
+                    <View style={styles.mainBoxSection}>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText1}>Booking Date</Text>
+                      </View>
+                      <View style={styles.verticalDivider}></View>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText2}>{props.bookingDate}</Text>
+                      </View>
                     </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>{props.bookingDate}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.horizontalDivider}></View>
+                    <View style={styles.horizontalDivider}></View>
 
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Allotment Date</Text>
+                    <View style={styles.mainBoxSection}>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText1}>Allotment Date</Text>
+                      </View>
+                      <View style={styles.verticalDivider}></View>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText2}>
+                          {props.allotmentDate}
+                        </Text>
+                      </View>
                     </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>{props.allotmentDate}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.horizontalDivider}></View>
+                    <View style={styles.horizontalDivider}></View>
 
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Agreement Date</Text>
+                    <View style={styles.mainBoxSection}>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText1}>Agreement Date</Text>
+                      </View>
+                      <View style={styles.verticalDivider}></View>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText2}>
+                          {props.agreementDate}
+                        </Text>
+                      </View>
                     </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>{props.agreementDate}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.horizontalDivider}></View>
+                    <View style={styles.horizontalDivider}></View>
 
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Payment Plan</Text>
+                    <View style={styles.mainBoxSection}>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText1}>Payment Plan</Text>
+                      </View>
+                      <View style={styles.verticalDivider}></View>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText2}>{props.paymentPlan}</Text>
+                      </View>
                     </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>{props.paymentPlan}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.horizontalDivider}></View>
+                    <View style={styles.horizontalDivider}></View>
 
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Payment Source</Text>
+                    <View style={styles.mainBoxSection}>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText1}>Payment Source</Text>
+                      </View>
+                      <View style={styles.verticalDivider}></View>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText2}>
+                          {props.paymentSource}
+                        </Text>
+                      </View>
                     </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>{props.paymentSource}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.horizontalDivider}></View>
+                    <View style={styles.horizontalDivider}></View>
 
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Bank / F.I. Name</Text>
+                    <View style={styles.mainBoxSection}>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText1}>Bank / F.I. Name</Text>
+                      </View>
+                      <View style={styles.verticalDivider}></View>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText2}>
+                          {props.bankOrFinanceInstitutionName}
+                        </Text>
+                      </View>
                     </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>
-                        {props.bankOrFinanceInstitutionName}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={styles.horizontalDivider}></View>
+                    <View style={styles.horizontalDivider}></View>
 
-                  <View style={styles.mainBoxSection}>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText1}>Loan Amount</Text>
-                    </View>
-                    <View style={styles.verticalDivider}></View>
-                    <View style={styles.subBoxContainer}>
-                      <Text style={styles.boxText2}>
-                        {parseFloat(props.loanAmount).toFixed(2)}
-                      </Text>
+                    <View style={styles.mainBoxSection}>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText1}>Loan Amount</Text>
+                      </View>
+                      <View style={styles.verticalDivider}></View>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText2}>
+                          {`₹ ${parseFloat(props.loanAmount).toLocaleString(
+                            "en-IN",
+                            {
+                              maximumFractionDigits: 2,
+                              currency: "INR",
+                            }
+                          )}`}
+                        </Text>
+                      </View>
                     </View>
                   </View>
-                </View>
+                  <Text style={styles.notesText}>Notes :</Text>
+                  <View style={styles.notesTextSubView}>
+                    <View style={styles.notesPoints}></View>
+                    <Text style={styles.notesSubText}>
+                      Discrepancies if any, should be brought to the notice of
+                      the company immediately
+                    </Text>
+                  </View>
+                  <View style={styles.notesTextSubView}>
+                    <View style={styles.notesPoints}></View>
+                    <Text style={styles.notesSubText}>
+                      Applicant details or any other information doesn't entitle
+                      user/applicant/customer(s) to claim ownership of aforesaid
+                      property unless the conveyance deed is executed in favour
+                      of the user/applicant/customer(s) by the company.
+                    </Text>
+                  </View>
+                </>
               )}
             </View>
 
@@ -706,17 +956,17 @@ const styles = StyleSheet.create({
     flex: 0.5,
     height: 60,
     justifyContent: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
   },
   boxText1: {
     alignSelf: "flex-start",
-    fontSize: 14,
+    fontSize: 13,
     fontFamily: Fonts.RobotoMedium,
     color: Colors.black,
   },
   boxText2: {
     alignSelf: "flex-start",
-    fontSize: 14,
+    fontSize: 13,
     fontFamily: Fonts.RobotoMedium,
     color: Colors.goldColorText,
   },
@@ -752,6 +1002,36 @@ const styles = StyleSheet.create({
   },
   paymentHistoryContainer: {
     marginBottom: 15,
+  },
+  notesText: {
+    alignSelf: "flex-start",
+    fontSize: 16,
+    fontFamily: Fonts.RobotoMedium,
+    color: Colors.black,
+    marginTop: 15,
+  },
+  notesTextSubView: {
+    backgroundColor: Colors.white,
+    justifyContent: "flex-start",
+    flexDirection: "row",
+    alignItems: "flex-start",
+    paddingLeft: 10,
+    paddingRight: 15,
+    marginTop: 10,
+  },
+  notesPoints: {
+    height: 5,
+    width: 5,
+    borderRadius: 2.5,
+    marginRight: 5,
+    marginTop: 7,
+    backgroundColor: Colors.black,
+  },
+  notesSubText: {
+    alignSelf: "flex-start",
+    fontSize: 14,
+    fontFamily: Fonts.RobotoMedium,
+    color: Colors.black,
   },
   whatsAppIcon: { height: 35, width: 35, marginBottom: 15 },
   phoneIcon: { height: 35, width: 35 },
