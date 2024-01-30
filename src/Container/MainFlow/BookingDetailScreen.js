@@ -7,6 +7,7 @@ import {
   getPaymentPlanDetails,
   getUnitSummaryDetails,
   getStatementSummaryDetails,
+  getReceiptSummaryDetails,
 } from "../Action/actions";
 import {
   StyleSheet,
@@ -24,6 +25,7 @@ export default function BookingDetailScreen(props) {
   const [unitDetails, setUnitDetails] = useState({});
   const [paymentPlanDetails, setPaymentPlanDetails] = useState({});
   const [statementSummaryDetails, setStatementSummaryDetails] = useState({});
+  const [receiptSummaryDetails, setReceiptSummaryDetails] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const tabData = [
@@ -46,6 +48,10 @@ export default function BookingDetailScreen(props) {
     {
       id: 5,
       tabName: "Payment Plan & Schedule",
+    },
+    {
+      id: 6,
+      tabName: "Receipt information status",
     },
   ];
 
@@ -167,6 +173,35 @@ export default function BookingDetailScreen(props) {
         setStatementSummaryDetails(newResponse.data[0].message[0]);
       } else {
         setStatementSummaryDetails(null);
+      }
+    } else {
+      Constant.errorHandle(response);
+    }
+  }
+
+  async function getReceiptSummaryDetailsAPI() {
+    const response = await getToken(
+      Constant.commonConstant.email,
+      Constant.commonConstant.password
+    );
+    if (
+      response &&
+      response.status === Constant.apiResponse.success &&
+      response.data.status == Constant.apiResponse.status
+    ) {
+      const newResponse = await getReceiptSummaryDetails({
+        tokenId: response.data.tokenId,
+        customerCode: Constant.commonConstant.currentUserCustomerCode,
+        bookingId: Constant.commonConstant.currentUserBookingId,
+      });
+      if (
+        newResponse &&
+        newResponse.status === Constant.apiResponse.success &&
+        newResponse.data[0].status == Constant.apiResponse.status
+      ) {
+        setReceiptSummaryDetails(newResponse.data[0].message[0].receiptDetails);
+      } else {
+        setReceiptSummaryDetails(null);
       }
     } else {
       Constant.errorHandle(response);
@@ -299,10 +334,30 @@ export default function BookingDetailScreen(props) {
     );
   }
 
+  function renderReceiptSummaryData(item, index) {
+    return (
+      <>
+        <View style={styles.mainBoxSection}>
+          <View style={styles.subBoxContainer}>
+            <Text style={styles.boxText1}>{item.receiptDisplayNo}</Text>
+          </View>
+          <View style={styles.verticalDivider}></View>
+          <View style={styles.subBoxContainer}>
+            <Text style={styles.boxText2}>{item.paymentMode}</Text>
+          </View>
+        </View>
+        {receiptSummaryDetails.length - 1 === index ? null : (
+          <View style={styles.horizontalDivider}></View>
+        )}
+      </>
+    );
+  }
+
   useEffect(() => {
     getUnitDetailsAPI();
     getPaymentPlanDetailsAPI();
     getStatementSummaryDetailsAPI();
+    getReceiptSummaryDetailsAPI();
   }, []);
 
   return (
@@ -736,6 +791,33 @@ export default function BookingDetailScreen(props) {
                     scrollEnabled={true}
                     onEndReachedThreshold={1}
                   />
+                </View>
+              ) : tabIndex == 6 ? (
+                <View style={styles.paymentHistoryContainer}>
+                  <View style={styles.mainBoxContainer}>
+                    <View style={styles.mainBoxSection}>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText1}>Receipt No</Text>
+                      </View>
+                      <View style={styles.verticalDivider}></View>
+                      <View style={styles.subBoxContainer}>
+                        <Text style={styles.boxText1}>Mode</Text>
+                      </View>
+                    </View>
+                    <View style={styles.horizontalDivider}></View>
+                    <View>
+                      <FlatList
+                        data={receiptSummaryDetails}
+                        renderItem={({ item, index }) =>
+                          renderReceiptSummaryData(item, index)
+                        }
+                        extraData={receiptSummaryDetails}
+                        keyExtractor={(item, index) => String(index)}
+                        scrollEnabled={true}
+                        onEndReachedThreshold={1}
+                      />
+                    </View>
+                  </View>
                 </View>
               ) : (
                 <>

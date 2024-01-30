@@ -2,7 +2,7 @@ import { showAlert } from "../Functions/Alerts";
 var { EventEmitter } = require("fbemitter");
 
 export const baseURL = {
-  URL: "https://erp.krisumi.in/SalesCustomer/api/customerdetail",
+  URL: "https://erp.krisumi.in/SalesCustomer/api/CustomerDetail",
 };
 
 export const API = {
@@ -12,6 +12,7 @@ export const API = {
   getUnitSummaryDetails: baseURL.URL + "/GetUnitSummaryDetails",
   getPaymentPlanDetails: baseURL.URL + "/GetPaymentPlanDetails",
   getStatementSummaryDetails: baseURL.URL + "/GetStatementSummaryDetails",
+  getReceiptSummaryDetails: baseURL.URL + "/GetReceiptSummaryDetails",
   addContactUsRequest: "https://krisumi.virvainfotech.com/api/v1/add/enquiry",
   raiseTicketRequest: "https://krisumi.virvainfotech.com/api/v1/add/ticket",
 };

@@ -103,6 +103,24 @@ export function getStatementSummaryDetails(param) {
     });
 }
 
+export function getReceiptSummaryDetails(param) {
+  return Axios.post(Constants.API.getReceiptSummaryDetails, param)
+    .then(function (response) {
+      console.log(
+        "getReceiptSummaryDetails api call success => ",
+        JSON.stringify(response)
+      );
+      return response;
+    })
+    .catch(function (error) {
+      console.log(
+        "getReceiptSummaryDetails api call fail => ",
+        JSON.stringify(error.response)
+      );
+      return error.response;
+    });
+}
+
 export function addContactUsRequest(param) {
   return Axios.post(Constants.API.addContactUsRequest, param)
     .then(function (response) {
