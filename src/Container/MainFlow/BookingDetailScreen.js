@@ -338,12 +338,16 @@ export default function BookingDetailScreen(props) {
     return (
       <>
         <View style={styles.mainBoxSection}>
-          <View style={styles.subBoxContainer}>
-            <Text style={styles.boxText1}>{item.receiptDisplayNo}</Text>
+          <View style={styles.receiptSubBoxContainer}>
+            <Text style={styles.boxText2}>{item.receiptDisplayNo}</Text>
           </View>
           <View style={styles.verticalDivider}></View>
-          <View style={styles.subBoxContainer}>
+          <View style={styles.receiptSubBoxContainer}>
             <Text style={styles.boxText2}>{item.paymentMode}</Text>
+          </View>
+          <View style={styles.verticalDivider}></View>
+          <View style={styles.receiptSubBoxContainer}>
+            <Text style={styles.boxText2}>{item.receiptStatus}</Text>
           </View>
         </View>
         {receiptSummaryDetails.length - 1 === index ? null : (
@@ -678,7 +682,6 @@ export default function BookingDetailScreen(props) {
                       </View>
                     </View>
                     <View style={styles.horizontalDivider}></View>
-
                     <View style={styles.mainBoxSection}>
                       <View style={styles.subBoxContainer}>
                         <Text style={styles.boxText1}>Total Receipts</Text>
@@ -696,7 +699,6 @@ export default function BookingDetailScreen(props) {
                       </View>
                     </View>
                     <View style={styles.horizontalDivider}></View>
-
                     <View style={styles.mainBoxSection}>
                       <View style={styles.subBoxContainer}>
                         <Text style={styles.boxText1}>Outstanding Balance</Text>
@@ -739,13 +741,12 @@ export default function BookingDetailScreen(props) {
                   <View style={styles.notesTextSubView}>
                     <View style={styles.notesPoints}></View>
                     <Text style={styles.notesSubText}>
-                      Interest accumulated as on date is Rs (interest_amount :
-                      Postman se yeh detail fetch karni hai dynamically) /-
-                      (excluding GST), on all non-timely payments. You are
-                      requested to clear your interest dues along with
-                      installment dues. You can raise request with our Customer
-                      Services Team to share detailed interest sheet for your
-                      record.
+                      {`Interest accumulated as on date is Rs ${parseFloat(
+                        statementSummaryDetails.totalInterestOutstandingAmount
+                      ).toLocaleString("en-IN", {
+                        maximumFractionDigits: 2,
+                        currency: "INR",
+                      })} /- (excluding GST), on all non-timely payments. You are requested to clear your interest dues along with installment dues. You can raise request with our Customer Services Team to share detailed interest sheet for your record.`}
                     </Text>
                   </View>
                   <View style={styles.notesTextSubView}>
@@ -796,12 +797,16 @@ export default function BookingDetailScreen(props) {
                 <View style={styles.paymentHistoryContainer}>
                   <View style={styles.mainBoxContainer}>
                     <View style={styles.mainBoxSection}>
-                      <View style={styles.subBoxContainer}>
+                      <View style={styles.receiptSubBoxContainer}>
                         <Text style={styles.boxText1}>Receipt No</Text>
                       </View>
                       <View style={styles.verticalDivider}></View>
-                      <View style={styles.subBoxContainer}>
+                      <View style={styles.receiptSubBoxContainer}>
                         <Text style={styles.boxText1}>Mode</Text>
+                      </View>
+                      <View style={styles.verticalDivider}></View>
+                      <View style={styles.receiptSubBoxContainer}>
+                        <Text style={styles.boxText1}>Payment Status</Text>
                       </View>
                     </View>
                     <View style={styles.horizontalDivider}></View>
@@ -817,6 +822,32 @@ export default function BookingDetailScreen(props) {
                         onEndReachedThreshold={1}
                       />
                     </View>
+                  </View>
+                  <Text style={styles.notesText}>Notes :</Text>
+                  <View style={styles.notesTextSubView}>
+                    <View style={styles.notesPoints}></View>
+                    <Text style={styles.notesSubText}>
+                      If the Payments is made through cheque then the payment in
+                      subject to the realization of the same.
+                    </Text>
+                  </View>
+                  <View style={styles.notesTextSubView}>
+                    <View style={styles.notesPoints}></View>
+                    <Text style={styles.notesSubText}>
+                      TDS credit has been given only for those certificates
+                      which has been submitted in original.
+                    </Text>
+                  </View>
+                  <View style={styles.notesTextSubView}>
+                    <View style={styles.notesPoints}></View>
+                    <Text style={styles.notesSubText}>
+                      Discrepancies if any, should be brought to the notice of
+                      the company immediately Applicant details or any other
+                      information doesn't entitle user/applicant/customer(s) to
+                      claim ownership of aforesaid property unless the
+                      conveyance deed is executed in favour of the
+                      user/applicant/customer(s) by the company.
+                    </Text>
                   </View>
                 </View>
               ) : (
@@ -1039,6 +1070,12 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: "center",
     paddingHorizontal: 15,
+  },
+  receiptSubBoxContainer: {
+    flex: 0.33,
+    height: 60,
+    justifyContent: "center",
+    paddingHorizontal: 5,
   },
   boxText1: {
     alignSelf: "flex-start",
