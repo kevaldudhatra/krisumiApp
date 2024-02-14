@@ -18,6 +18,8 @@ import {
   FlatList,
   Dimensions,
   ScrollView,
+  Platform,
+  Linking,
 } from "react-native";
 
 export default function BookingDetailScreen(props) {
@@ -978,11 +980,40 @@ export default function BookingDetailScreen(props) {
               source={Images.bottomBackgroung}
             ></Image>
             <View style={styles.bottomSubContainer}>
-              <Image
-                style={styles.whatsAppIcon}
-                source={Images.whatsAppIcon}
-              ></Image>
-              <Image style={styles.phoneIcon} source={Images.phoneIcon}></Image>
+              <TouchableOpacity
+                onPress={() => {
+                  let url = `https://api.whatsapp.com/send?phone=9289086396`;
+                  Linking.openURL(url)
+                    .then((data) => {
+                      console.log("WhatsApp Opened", data);
+                    })
+                    .catch((e) => {
+                      console.log("WhatsApp Error", e);
+                    });
+                }}
+              >
+                <Image
+                  style={styles.whatsAppIcon}
+                  source={Images.whatsAppIcon}
+                ></Image>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => {
+                  let number = "";
+                  if (Platform.OS === "ios") {
+                    number = "telprompt:${+919289086396}";
+                  } else {
+                    number = "tel:${+919289086396}";
+                  }
+                  Linking.openURL(number);
+                }}
+              >
+                <Image
+                  style={styles.phoneIcon}
+                  source={Images.phoneIcon}
+                ></Image>
+              </TouchableOpacity>
             </View>
           </View>
         </ScrollView>

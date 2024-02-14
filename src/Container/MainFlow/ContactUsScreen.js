@@ -14,6 +14,8 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   TouchableOpacity,
+  Linking,
+  Platform,
 } from "react-native";
 
 export default function ContactUsScreen() {
@@ -191,7 +193,17 @@ export default function ContactUsScreen() {
               </View>
             </TouchableOpacity>
 
-            <View
+            <TouchableOpacity
+              onPress={() => {
+                let url = `https://api.whatsapp.com/send?phone=9289086396`;
+                Linking.openURL(url)
+                  .then((data) => {
+                    console.log("WhatsApp Opened", data);
+                  })
+                  .catch((e) => {
+                    console.log("WhatsApp Error", e);
+                  });
+              }}
               style={{
                 justifyContent: "flex-start",
                 flexDirection: "row",
@@ -205,9 +217,18 @@ export default function ContactUsScreen() {
                 source={Images.darkWhatsappIcon}
               ></Image>
               <Text style={styles.bottmLineText}>Chat on Whatsapp</Text>
-            </View>
+            </TouchableOpacity>
 
-            <View
+            <TouchableOpacity
+              onPress={() => {
+                let number = "";
+                if (Platform.OS === "ios") {
+                  number = "telprompt:${+919289086396}";
+                } else {
+                  number = "tel:${+919289086396}";
+                }
+                Linking.openURL(number);
+              }}
               style={{
                 justifyContent: "flex-start",
                 flexDirection: "row",
@@ -221,7 +242,7 @@ export default function ContactUsScreen() {
                 source={Images.darkPhoneIcon}
               ></Image>
               <Text style={styles.bottmLineText}>Call Us</Text>
-            </View>
+            </TouchableOpacity>
           </View>
 
           <Image
